@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-react-app *)",
+      "Bash(cd /Users/vynguyen && npx create-react-app nhi_wedding_website 2>&1 | tail -20)",
+      "Bash(cd /tmp && npx create-react-app wedding-temp 2>&1 | tail -10)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(npm install *)",
+      "Bash(node /Users/vynguyen/nhi_wedding_website/node_modules/.bin/react-scripts --version)",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
+    ]
+  }
+}
