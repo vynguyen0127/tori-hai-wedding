@@ -1,0 +1,69 @@
+.home-hero {
+  min-height: calc(100vh - 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #fdf6ee 0%, #f5ede0 60%, #ede0d0 100%);
+  text-align: center;
+  padding: 3rem 1.5rem;
+}
+
+.home-hero-content {
+  max-width: 600px;
+}
+
+.home-pre-title {
+  font-size: 0.85rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #aaa;
+  margin-bottom: 1rem;
+}
+
+.home-names {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(3rem, 10vw, 5.5rem);
+  font-weight: 300;
+  color: #4a3728;
+  margin: 0;
+  letter-spacing: 0.05em;
+}
+
+.home-divider {
+  color: #c4a882;
+  font-size: 1.2rem;
+  margin: 0.75rem 0;
+  letter-spacing: 0.5em;
+}
+
+.home-date {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.5rem;
+  color: #7a5c3f;
+  font-style: italic;
+  margin: 0.25rem 0;
+}
+
+.home-location {
+  font-size: 0.9rem;
+  color: #999;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.home-rsvp-btn {
+  margin-top: 2rem;
+  padding: 0.85rem 2.8rem;
+  background: #8b6f4e;
+  color: white;
+  border: none;
+  letter-spacing: 0.2em;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.home-rsvp-btn:hover {
+  background: #6e5239;
+}
