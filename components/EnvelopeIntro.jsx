@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 /**
  * EnvelopeIntro
@@ -18,8 +18,16 @@ import { useState } from 'react';
 
 
 export default function EnvelopeIntro() {
-  const [stage, setStage]     = useState('entering');
+  const [stage, setStage]     = useState('idle');
   const [exiting, setExiting] = useState(false);
+
+  useEffect(() => {
+    if (sessionStorage.getItem('env-seen')) {
+      setStage('done');   // returning visitor — drop the cover instantly
+    } else {
+      setStage('entering'); // first visit — show the envelope
+    }
+  }, []);
 
   function openEnvelope() {
     if (stage !== 'entering') return;
@@ -28,11 +36,18 @@ export default function EnvelopeIntro() {
   }
 
   function enter() {
+    sessionStorage.setItem('env-seen', '1');
     setExiting(true);
-    setTimeout(() => setStage('done'), 1000);
+    setTimeout(() => setStage('done'), 700);
   }
 
   if (stage === 'done') return null;
+
+  // 'idle' = before useEffect has run (SSR + first client paint).
+  // Render a plain cover so the home page is never visible during the check.
+  if (stage === 'idle') {
+    return <div style={{ position: 'fixed', inset: 0, background: '#f0f6fa', zIndex: 9999 }} />;
+  }
 
   const flapOpen     = stage === 'open' || stage === 'rising';
   const showEnterBtn = stage === 'rising';

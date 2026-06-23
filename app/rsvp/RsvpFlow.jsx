@@ -40,7 +40,7 @@ function PhoneLookup({ onFound }) {
           id="phone"
           type="tel"
           className="rsvp-form__input"
-          placeholder="(555) 867-5309"
+          placeholder="(678) 999-8212"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           required

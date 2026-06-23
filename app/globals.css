@@ -136,12 +136,12 @@ main { flex: 1; }
 }
 
 .home-names {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(3rem, 10vw, 5.5rem);
-  font-weight: 300;
+  font-family: var(--font-script), 'Great Vibes', cursive;
+  font-size: clamp(3.5rem, 11vw, 6.5rem);
+  font-weight: 400;
   color: #1a3a52;
   margin: 0;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
 }
 
 .home-divider {
@@ -499,11 +499,14 @@ main { flex: 1; }
   animation: envFadeIn 0.7s ease both;
 }
 
-.env-overlay--exit     { animation: envFadeOut 1.1s ease both; pointer-events: none; }
+.env-overlay--exit     { animation: envZoomThrough 0.7s cubic-bezier(0.4, 0, 0.6, 1) both; pointer-events: none; }
 .env-overlay--tappable { cursor: pointer; }
 
-@keyframes envFadeIn  { from { opacity: 0; } to { opacity: 1; } }
-@keyframes envFadeOut { from { opacity: 1; } to { opacity: 0; } }
+@keyframes envFadeIn     { from { opacity: 0; } to { opacity: 1; } }
+@keyframes envZoomThrough {
+  from { opacity: 1; transform: scale(1);    }
+  to   { opacity: 0; transform: scale(1.18); }
+}
 
 /* ── Scene / wrapper ────────────────────────────────────────────────────────── */
 .env-scene { cursor: default; }
@@ -568,9 +571,9 @@ main { flex: 1; }
 }
 
 .env-card__names {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(1.6rem, 5vw, 2rem);
-  font-weight: 300;
+  font-family: var(--font-script), 'Great Vibes', cursive;
+  font-size: clamp(2rem, 6vw, 2.6rem);
+  font-weight: 400;
   color: #1a3a52;
   margin: 0 0 8px;
   letter-spacing: 0.04em;
