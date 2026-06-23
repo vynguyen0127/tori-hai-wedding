@@ -2,15 +2,6 @@
 
 import { useState } from 'react';
 
-const MEAL_OPTIONS = [
-  { value: '',           label: 'Select a meal…'  },
-  { value: 'chicken',    label: '🍗 Chicken'       },
-  { value: 'fish',       label: '🐟 Fish'          },
-  { value: 'vegetarian', label: '🥦 Vegetarian'    },
-  { value: 'vegan',      label: '🌱 Vegan'         },
-  { value: 'kids',       label: '🧒 Kids Meal'     },
-];
-
 // ── Step 1: Phone lookup ──────────────────────────────────────────────────────
 function PhoneLookup({ onFound }) {
   const [phone, setPhone]     = useState('');
@@ -76,12 +67,10 @@ function PhoneLookup({ onFound }) {
 function HouseholdForm({ household, onSubmitted }) {
   const [responses, setResponses] = useState(() =>
     household.guests.map((g) => ({
-      guestId:        g.guestId,
-      status:         ['attending','declined'].includes(g.rsvpStatus) ? g.rsvpStatus : '',
-      mealPreference: g.mealPreference,
-      dietaryNotes:   g.dietaryNotes,
-      songRequest:    g.songRequest,
-      plusOneName:    g.plusOneName,
+      guestId:      g.guestId,
+      status:       ['attending','declined'].includes(g.rsvpStatus) ? g.rsvpStatus : '',
+      dietaryNotes: g.dietaryNotes,
+      plusOneName:  g.plusOneName,
     }))
   );
   const [submitting, setSubmitting] = useState(false);
@@ -99,10 +88,6 @@ function HouseholdForm({ household, onSubmitted }) {
 
     if (responses.some((r) => !r.status)) {
       setError('Please select attending or not attending for every guest.');
-      return;
-    }
-    if (responses.some((r) => r.status === 'attending' && !r.mealPreference)) {
-      setError('Please select a meal preference for each attending guest.');
       return;
     }
 
@@ -153,18 +138,6 @@ function HouseholdForm({ household, onSubmitted }) {
 
               {r.status === 'attending' && (
                 <div className="guest-card__details">
-                  <label className="guest-card__label" htmlFor={`meal-${guest.guestId}`}>
-                    Meal preference *
-                  </label>
-                  <select id={`meal-${guest.guestId}`} className="guest-card__select"
-                    value={r.mealPreference}
-                    onChange={(e) => update(guest.guestId, 'mealPreference', e.target.value)}
-                    required>
-                    {MEAL_OPTIONS.map((o) => (
-                      <option key={o.value} value={o.value} disabled={!o.value}>{o.label}</option>
-                    ))}
-                  </select>
-
                   <label className="guest-card__label" htmlFor={`dietary-${guest.guestId}`}>
                     Dietary restrictions or allergies
                   </label>
@@ -172,14 +145,6 @@ function HouseholdForm({ household, onSubmitted }) {
                     placeholder="e.g. nut allergy, gluten-free"
                     value={r.dietaryNotes}
                     onChange={(e) => update(guest.guestId, 'dietaryNotes', e.target.value)} />
-
-                  <label className="guest-card__label" htmlFor={`song-${guest.guestId}`}>
-                    Song request 🎵
-                  </label>
-                  <input id={`song-${guest.guestId}`} type="text" className="guest-card__input"
-                    placeholder="Song title — Artist"
-                    value={r.songRequest}
-                    onChange={(e) => update(guest.guestId, 'songRequest', e.target.value)} />
 
                   {guest.plusOneAllowed && (
                     <>
