@@ -13,7 +13,8 @@
  *         "mealPreference": "chicken",  // only required when attending
  *         "dietaryNotes": "",
  *         "songRequest": "September - Earth Wind & Fire",
- *         "plusOneName": "Alex Smith"   // only if plusOneAllowed
+ *         "plusOneName": "Alex Smith",          // only if plusOneAllowed
+        "plusOneDietaryNotes": "gluten-free"  // only if plusOneAllowed
  *       }
  *     ]
  *   }
@@ -70,8 +71,9 @@ export async function POST(request) {
         );
       }
       // Prevent plus-one submission if not allowed
-      if (r.plusOneName && !guest.plusOneAllowed) {
-        r.plusOneName = ''; // silently strip
+      if (!guest.plusOneAllowed) {
+        r.plusOneName         = ''; // silently strip
+        r.plusOneDietaryNotes = '';
       }
     }
 

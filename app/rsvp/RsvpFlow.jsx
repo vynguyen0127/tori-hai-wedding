@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+
 // ── Step 1: Phone lookup ──────────────────────────────────────────────────────
 function PhoneLookup({ onFound }) {
   const [phone, setPhone]     = useState('');
@@ -40,7 +41,7 @@ function PhoneLookup({ onFound }) {
           id="phone"
           type="tel"
           className="rsvp-form__input"
-          placeholder="(678) 999-8212"
+          placeholder="(555) 867-5309"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           required
@@ -70,7 +71,8 @@ function HouseholdForm({ household, onSubmitted }) {
       guestId:      g.guestId,
       status:       ['attending','declined'].includes(g.rsvpStatus) ? g.rsvpStatus : '',
       dietaryNotes: g.dietaryNotes,
-      plusOneName:  g.plusOneName,
+      plusOneName:         g.plusOneName,
+      plusOneDietaryNotes: g.plusOneDietaryNotes,
     }))
   );
   const [submitting, setSubmitting] = useState(false);
@@ -155,6 +157,14 @@ function HouseholdForm({ household, onSubmitted }) {
                         placeholder="Guest's full name"
                         value={r.plusOneName}
                         onChange={(e) => update(guest.guestId, 'plusOneName', e.target.value)} />
+
+                      <label className="guest-card__label" htmlFor={`plus-dietary-${guest.guestId}`}>
+                        Plus-one dietary restrictions or allergies
+                      </label>
+                      <input id={`plus-dietary-${guest.guestId}`} type="text" className="guest-card__input"
+                        placeholder="e.g. nut allergy, gluten-free"
+                        value={r.plusOneDietaryNotes}
+                        onChange={(e) => update(guest.guestId, 'plusOneDietaryNotes', e.target.value)} />
                     </>
                   )}
                 </div>
