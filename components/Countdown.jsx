@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 
 // UPDATE THIS DATE to match your actual wedding date + time
-const WEDDING_DATE = new Date('2027-06-05T17:00:00');
+const WEDDING_DATE = new Date('2027-05-29T17:00:00');
 
 function pad(n) {
   return String(n).padStart(2, '0');

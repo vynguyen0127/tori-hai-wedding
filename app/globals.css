@@ -20,8 +20,8 @@ main { flex: 1; }
 .footer {
   text-align: center;
   padding: 1.5rem;
-  background: #faf7f3;
-  border-top: 1px solid #e8ddd0;
+  background: #f0f6fa;
+  border-top: 1px solid #c5dff0;
   font-size: 0.8rem;
   color: #bbb;
   letter-spacing: 0.08em;
@@ -45,7 +45,7 @@ main { flex: 1; }
 .navbar-brand {
   font-size: 1.6rem;
   letter-spacing: 0.25em;
-  color: #8b6f4e;
+  color: #3d7a9e;
   cursor: pointer;
   font-weight: 600;
   text-decoration: none;
@@ -73,8 +73,8 @@ main { flex: 1; }
 
 .navbar-links li a:hover,
 .navbar-links li a.active {
-  color: #8b6f4e;
-  border-bottom-color: #8b6f4e;
+  color: #3d7a9e;
+  border-bottom-color: #3d7a9e;
 }
 
 .hamburger {
@@ -91,7 +91,7 @@ main { flex: 1; }
   display: block;
   width: 24px;
   height: 2px;
-  background: #8b6f4e;
+  background: #3d7a9e;
   border-radius: 2px;
 }
 
@@ -120,7 +120,7 @@ main { flex: 1; }
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(160deg, #fdf6ee 0%, #f5ede0 60%, #ede0d0 100%);
+  background: linear-gradient(160deg, #edf5fb 0%, #dceef8 60%, #c8e0f0 100%);
   text-align: center;
   padding: 3rem 1.5rem;
 }
@@ -139,13 +139,13 @@ main { flex: 1; }
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: clamp(3rem, 10vw, 5.5rem);
   font-weight: 300;
-  color: #4a3728;
+  color: #1a3a52;
   margin: 0;
   letter-spacing: 0.05em;
 }
 
 .home-divider {
-  color: #c4a882;
+  color: #7db5d4;
   font-size: 1.2rem;
   margin: 0.75rem 0;
   letter-spacing: 0.5em;
@@ -154,7 +154,7 @@ main { flex: 1; }
 .home-date {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 1.5rem;
-  color: #7a5c3f;
+  color: #2f6285;
   font-style: italic;
   margin: 0.25rem 0;
 }
@@ -170,7 +170,7 @@ main { flex: 1; }
   display: inline-block;
   margin-top: 2rem;
   padding: 0.85rem 2.8rem;
-  background: #8b6f4e;
+  background: #3d7a9e;
   color: white;
   border: none;
   letter-spacing: 0.2em;
@@ -181,7 +181,7 @@ main { flex: 1; }
   text-decoration: none;
 }
 
-.home-rsvp-btn:hover { background: #6e5239; }
+.home-rsvp-btn:hover { background: #2f6285; }
 
 /* ── Countdown ─────────────────────────────────────────────────────────────── */
 .countdown {
@@ -203,7 +203,7 @@ main { flex: 1; }
   font-size: 3.2rem;
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-weight: 300;
-  color: #8b6f4e;
+  color: #3d7a9e;
   line-height: 1;
 }
 
@@ -217,7 +217,7 @@ main { flex: 1; }
 
 .countdown-done {
   font-size: 1.5rem;
-  color: #8b6f4e;
+  color: #3d7a9e;
   font-family: 'Cormorant Garamond', Georgia, serif;
 }
 
@@ -227,7 +227,7 @@ main { flex: 1; }
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #faf7f3;
+  background: #f0f6fa;
   padding: 3rem 1.5rem;
 }
 
@@ -235,10 +235,10 @@ main { flex: 1; }
   text-align: center;
   max-width: 520px;
   background: white;
-  border: 1px solid #e8ddd0;
+  border: 1px solid #c5dff0;
   border-radius: 2px;
   padding: 3.5rem 3rem;
-  box-shadow: 0 2px 20px rgba(139, 111, 78, 0.06);
+  box-shadow: 0 2px 20px rgba(61, 122, 158, 0.06);
 }
 
 .placeholder-icon {
@@ -250,7 +250,7 @@ main { flex: 1; }
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 2.2rem;
   font-weight: 400;
-  color: #4a3728;
+  color: #1a3a52;
   margin: 0 0 1rem;
 }
 
@@ -279,7 +279,7 @@ main { flex: 1; }
   content: '–';
   position: absolute;
   left: 0;
-  color: #c4a882;
+  color: #7db5d4;
 }
 
 .placeholder-badge {
@@ -287,8 +287,8 @@ main { flex: 1; }
   font-size: 0.7rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #8b6f4e;
-  border: 1px solid #c4a882;
+  color: #3d7a9e;
+  border: 1px solid #7db5d4;
   padding: 0.4rem 1.2rem;
   border-radius: 40px;
 }
@@ -311,12 +311,12 @@ main { flex: 1; }
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #e8ddd0;
+  background: #c5dff0;
   transition: background 0.2s;
 }
 
-.rsvp-progress__dot--active   { background: #8b6f4e; }
-.rsvp-progress__dot--complete { background: #c4a882; }
+.rsvp-progress__dot--active   { background: #3d7a9e; }
+.rsvp-progress__dot--complete { background: #7db5d4; }
 
 .rsvp-step { animation: fadeIn 0.3s ease; }
 
@@ -329,7 +329,7 @@ main { flex: 1; }
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 2rem;
   font-weight: 400;
-  color: #4a3728;
+  color: #1a3a52;
   margin-bottom: 8px;
 }
 
@@ -347,7 +347,7 @@ main { flex: 1; }
   text-align: center;
 }
 
-.rsvp-step__help a { color: #8b6f4e; }
+.rsvp-step__help a { color: #3d7a9e; }
 
 .rsvp-form__label,
 .guest-card__label,
@@ -368,11 +368,11 @@ main { flex: 1; }
 .guest-card__select {
   width: 100%;
   padding: 12px 14px;
-  border: 1px solid #e8ddd0;
+  border: 1px solid #c5dff0;
   border-radius: 2px;
   font-size: 1rem;
   background: #fff;
-  color: #4a3728;
+  color: #1a3a52;
   margin-bottom: 20px;
   outline: none;
   transition: border-color 0.2s;
@@ -381,7 +381,7 @@ main { flex: 1; }
 
 .rsvp-form__input:focus,
 .guest-card__input:focus,
-.guest-card__select:focus { border-color: #8b6f4e; }
+.guest-card__select:focus { border-color: #3d7a9e; }
 
 .rsvp-form__error {
   color: #b94040;
@@ -403,27 +403,27 @@ main { flex: 1; }
 }
 
 .rsvp-form__btn--primary {
-  background: #8b6f4e;
+  background: #3d7a9e;
   color: white;
 }
 
-.rsvp-form__btn--primary:hover:not(:disabled) { background: #6e5239; }
+.rsvp-form__btn--primary:hover:not(:disabled) { background: #2f6285; }
 .rsvp-form__btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .guest-card {
   background: #fff;
-  border: 1px solid #e8ddd0;
+  border: 1px solid #c5dff0;
   border-radius: 2px;
   padding: 24px;
   margin-bottom: 16px;
-  box-shadow: 0 1px 8px rgba(139,111,78,0.05);
+  box-shadow: 0 1px 8px rgba(61, 122, 158, 0.05);
 }
 
 .guest-card__name {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 1.3rem;
   font-weight: 400;
-  color: #8b6f4e;
+  color: #3d7a9e;
   margin-bottom: 18px;
 }
 
@@ -440,17 +440,17 @@ main { flex: 1; }
   margin-bottom: 10px;
   font-size: 0.95rem;
   cursor: pointer;
-  color: #4a3728;
+  color: #1a3a52;
 }
 
 .guest-card__radio-label input[type="radio"] {
-  accent-color: #8b6f4e;
+  accent-color: #3d7a9e;
   width: 16px;
   height: 16px;
 }
 
 .guest-card__details {
-  border-top: 1px solid #f0e8df;
+  border-top: 1px solid #daeef8;
   padding-top: 18px;
   margin-top: 4px;
 }
@@ -459,20 +459,20 @@ main { flex: 1; }
 
 .rsvp-confirmation__icon {
   font-size: 2.5rem;
-  color: #c4a882;
+  color: #7db5d4;
   margin-bottom: 16px;
 }
 
 .rsvp-confirmation__summary {
-  background: #faf7f3;
-  border: 1px solid #e8ddd0;
+  background: #f0f6fa;
+  border: 1px solid #c5dff0;
   border-radius: 2px;
   padding: 20px 24px;
   margin: 24px 0;
   text-align: left;
   font-size: 0.95rem;
   line-height: 1.8;
-  color: #4a3728;
+  color: #1a3a52;
 }
 
 .rsvp-confirmation__note {
@@ -480,50 +480,30 @@ main { flex: 1; }
   color: #aaa;
 }
 
-.rsvp-confirmation__note a { color: #8b6f4e; }
+.rsvp-confirmation__note a { color: #3d7a9e; }
 
 /* ══════════════════════════════════════════════════════════════════════════════
    Envelope Intro Animation
-   ══════════════════════════════════════════════════════════════════════════════
-
-   Stage sequence:
-     entering  – overlay fades in, envelope visible, flap closed
-     open      – flap folds away (clip-path collapses to flat line at top)
-     rising    – invite card slides up out of the envelope
-     exiting   – overlay fades out to reveal home page
-
-   Positioning notes (container 340×220px, pocket covers bottom 62%):
-     • .env-card initial:  translateY(45%) — card hidden below pocket
-     • .env-card risen:    translateY(-38%) — card pokes ~72px above envelope
-     • Adjust these % values if the card's font size changes its rendered height.
    ══════════════════════════════════════════════════════════════════════════════ */
 
 /* ── Overlay ────────────────────────────────────────────────────────────────── */
 .env-overlay {
   position: fixed;
   inset: 0;
-  background: #faf7f3;
+  background: #f0f6fa;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  cursor: pointer;
   animation: envFadeIn 0.7s ease both;
 }
 
-.env-overlay--exit    { animation: envFadeOut 1.1s ease both; pointer-events: none; }
+.env-overlay--exit     { animation: envFadeOut 1.1s ease both; pointer-events: none; }
 .env-overlay--tappable { cursor: pointer; }
 
-@keyframes envFadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@keyframes envFadeOut {
-  from { opacity: 1; }
-  to   { opacity: 0; }
-}
+@keyframes envFadeIn  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes envFadeOut { from { opacity: 1; } to { opacity: 0; } }
 
 /* ── Scene / wrapper ────────────────────────────────────────────────────────── */
 .env-scene { cursor: default; }
@@ -538,12 +518,12 @@ main { flex: 1; }
 .env-body {
   position: absolute;
   inset: 0;
-  background: #dfc9a8;
+  background: #a8cfe6;
   border-radius: 3px 3px 10px 10px;
   box-shadow:
-    0 20px 60px rgba(74, 55, 40, 0.22),
-    0 4px  12px rgba(74, 55, 40, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    0 20px 60px rgba(26, 58, 82, 0.18),
+    0 4px  12px rgba(26, 58, 82, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
   z-index: 1;
 }
 
@@ -553,19 +533,18 @@ main { flex: 1; }
   left: 50%;
   bottom: 16px;
   transform: translateX(-50%) translateY(0);
-  opacity: 0;                  /* invisible until the card starts rising */
+  opacity: 0;
   width: min(265px, 76%);
-  background: linear-gradient(160deg, #fffdf8 0%, #fef9ef 100%);
-  border: 1px solid #d4b896;
+  background: linear-gradient(160deg, #f8fcff 0%, #f0f8ff 100%);
+  border: 1px solid #9ecde6;
   padding: 28px 22px 24px;
   text-align: center;
   z-index: 2;
   box-shadow:
-    0 6px 24px rgba(74, 55, 40, 0.14),
-    0 1px  4px rgba(74, 55, 40, 0.08);
+    0 6px 24px rgba(26, 58, 82, 0.12),
+    0 1px  4px rgba(26, 58, 82, 0.07);
 }
 
-/* Card rises: pull up far enough that the full card clears the pocket */
 .env-card--up {
   opacity: 1;
   transform: translateX(-50%) translateY(-65%);
@@ -577,14 +556,14 @@ main { flex: 1; }
   font-size: 0.62rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #c4a882;
+  color: #7db5d4;
   margin: 0 0 12px;
 }
 
 .env-card__rule {
   width: 36px;
   height: 1px;
-  background: #c4a882;
+  background: #7db5d4;
   margin: 0 auto 16px;
 }
 
@@ -592,14 +571,14 @@ main { flex: 1; }
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: clamp(1.6rem, 5vw, 2rem);
   font-weight: 300;
-  color: #4a3728;
+  color: #1a3a52;
   margin: 0 0 8px;
   letter-spacing: 0.04em;
   line-height: 1.2;
 }
 
 .env-card__ornament {
-  color: #c4a882;
+  color: #7db5d4;
   font-size: 0.9rem;
   margin: 6px 0;
   letter-spacing: 0.3em;
@@ -608,7 +587,7 @@ main { flex: 1; }
 .env-card__date {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 0.85rem;
-  color: #8b6f4e;
+  color: #3d7a9e;
   font-style: italic;
   margin: 8px 0 2px;
   letter-spacing: 0.05em;
@@ -617,15 +596,13 @@ main { flex: 1; }
 .env-card__year {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 1.05rem;
-  color: #8b6f4e;
+  color: #3d7a9e;
   font-weight: 300;
   letter-spacing: 0.15em;
   margin: 0;
 }
 
 /* ── Pocket (envelope front face) ───────────────────────────────────────────── */
-/*    Covers the lower 62% of the envelope. The subtle diagonal gradients       */
-/*    hint at the classic fold lines visible on a real envelope's front face.   */
 .env-pocket {
   position: absolute;
   bottom: 0;
@@ -633,35 +610,29 @@ main { flex: 1; }
   right: 0;
   height: 62%;
   background:
-    linear-gradient(135deg, rgba(196, 168, 130, 0.22) 0%, transparent 55%) left  / 50% 100% no-repeat,
-    linear-gradient(225deg, rgba(196, 168, 130, 0.22) 0%, transparent 55%) right / 50% 100% no-repeat,
-    #dfc9a8;
+    linear-gradient(135deg, rgba(125, 181, 212, 0.22) 0%, transparent 55%) left  / 50% 100% no-repeat,
+    linear-gradient(225deg, rgba(125, 181, 212, 0.22) 0%, transparent 55%) right / 50% 100% no-repeat,
+    #a8cfe6;
   border-radius: 0 0 10px 10px;
   z-index: 3;
 }
 
 /* ── Flap ───────────────────────────────────────────────────────────────────── */
-/*    Triangular top flap. clip-path animates from a full downward-pointing     */
-/*    triangle to a flat line at the top — looks like the flap folding open.    */
 .env-flap {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 58%;
-  background: #d2b890;
+  background: #8dbfde;
   clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
   z-index: 4;
   transition: clip-path 1.1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.env-flap--open {
-  clip-path: polygon(0% 0%, 100% 0%, 50% 0%);
-}
+.env-flap--open { clip-path: polygon(0% 0%, 100% 0%, 50% 0%); }
 
 /* ── Wax seal ───────────────────────────────────────────────────────────────── */
-/*    Positioned at the V-tip of the flap (top: 58%, left: 50%).               */
-/*    Lives outside .env-flap so it isn't clipped by the flap's clip-path.     */
 .env-seal {
   position: absolute;
   top: 58%;
@@ -670,14 +641,14 @@ main { flex: 1; }
   z-index: 5;
   width: 44px;
   height: 44px;
-  background: #8b6f4e;
+  background: #3d7a9e;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 16px;
-  color: #faf7f3;
-  box-shadow: 0 2px 10px rgba(74, 55, 40, 0.4);
+  color: #f0f6fa;
+  box-shadow: 0 2px 10px rgba(26, 58, 82, 0.35);
   transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
@@ -696,11 +667,10 @@ main { flex: 1; }
 
 /* ── Enter button ───────────────────────────────────────────────────────────── */
 .env-enter-btn {
-  margin-top: 0;
   padding: 0.85rem 3rem;
   background: transparent;
-  color: #8b6f4e;
-  border: 1px solid #c4a882;
+  color: #3d7a9e;
+  border: 1px solid #7db5d4;
   letter-spacing: 0.2em;
   font-size: 0.78rem;
   text-transform: uppercase;
@@ -711,9 +681,9 @@ main { flex: 1; }
 }
 
 .env-enter-btn:hover {
-  background: #8b6f4e;
-  color: #faf7f3;
-  border-color: #8b6f4e;
+  background: #3d7a9e;
+  color: #f0f6fa;
+  border-color: #3d7a9e;
 }
 
 /* ── Skip hint ──────────────────────────────────────────────────────────────── */
@@ -722,7 +692,7 @@ main { flex: 1; }
   font-size: 0.65rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #c4a882;
+  color: #7db5d4;
   opacity: 0.55;
   cursor: pointer;
   user-select: none;

@@ -15,6 +15,8 @@ import { useState } from 'react';
  *
  * After the card has risen an "Enter website" button appears.
  */
+
+
 export default function EnvelopeIntro() {
   const [stage, setStage]     = useState('entering');
   const [exiting, setExiting] = useState(false);
@@ -40,7 +42,7 @@ export default function EnvelopeIntro() {
     <div
       className={[
         'env-overlay',
-        exiting   ? 'env-overlay--exit'    : '',
+        exiting   ? 'env-overlay--exit'     : '',
         clickable ? 'env-overlay--tappable' : '',
       ].filter(Boolean).join(' ')}
       onClick={clickable ? openEnvelope : undefined}
@@ -53,11 +55,12 @@ export default function EnvelopeIntro() {
 
           {/* ── Invite card ──────────────────────────────────────────────── */}
           <div className={`env-card${stage === 'rising' ? ' env-card--up' : ''}`}>
+
             <p className="env-card__eyebrow">You are cordially invited</p>
             <div className="env-card__rule" />
             <h2 className="env-card__names">Tori &amp; Hai</h2>
             <p className="env-card__ornament">✦</p>
-            <p className="env-card__date">Saturday, June 5th</p>
+            <p className="env-card__date">Saturday, May 29th</p>
             <p className="env-card__year">2027</p>
           </div>
 
