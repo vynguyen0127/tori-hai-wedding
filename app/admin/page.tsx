@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { getAllGuests, getRsvpSummary } from '@/lib/guests';
 import type { Guest } from '@/types';
 
