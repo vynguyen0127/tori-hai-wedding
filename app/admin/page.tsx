@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic';
 
 import { getAllGuests, getRsvpSummary } from '@/lib/guests';
+import CsvUpload from '@/components/CsvUpload';
 import type { Guest } from '@/types';
 
 function StatusBadge({ status }: { status: Guest['rsvpStatus'] }) {
@@ -49,6 +50,11 @@ export default async function AdminPage() {
           </ul>
         </section>
       )}
+
+      <section className="admin-section">
+        <h2>Import Guest List</h2>
+        <CsvUpload />
+      </section>
 
       <section className="admin-section">
         <h2>Guest List</h2>

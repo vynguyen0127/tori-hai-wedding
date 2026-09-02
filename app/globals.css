@@ -914,3 +914,68 @@ main { flex: 1; }
 .admin-badge--attending { background: #e8f5ee; color: #4a7c59; }
 .admin-badge--declined  { background: #faeaea; color: #a05050; }
 .admin-badge--pending   { background: #fff8f0; color: #8b6f4e; }
+
+/* ── CSV Upload ───────────────────────────────────────────────────────────────── */
+
+.csv-upload__dropzone {
+  border: 2px dashed #d4c4b0;
+  border-radius: 4px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  background: #faf7f3;
+}
+
+.csv-upload__dropzone:hover,
+.csv-upload__dropzone--loading {
+  border-color: #8b6f4e;
+  background: #fff8f0;
+}
+
+.csv-upload__input {
+  display: none;
+}
+
+.csv-upload__label {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.csv-upload__label span {
+  color: #8b6f4e;
+  text-decoration: underline;
+}
+
+.csv-upload__hint {
+  margin: 0.4rem 0 0;
+  font-size: 0.75rem;
+  color: #aaa;
+}
+
+.csv-upload__result {
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.csv-upload__result--success {
+  background: #e8f5ee;
+  color: #4a7c59;
+}
+
+.csv-upload__result--error {
+  background: #faeaea;
+  color: #a05050;
+}
+
+.csv-upload__result--error ul {
+  margin: 0.5rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.csv-upload__result--error li {
+  margin: 0.2rem 0;
+}
