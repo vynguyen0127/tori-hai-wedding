@@ -1,57 +1,29 @@
-/**
- * scripts/seed.ts
- * Run with:  npx tsx scripts/seed.ts
- *
- * Inserts households and guests from data/seed.json into the SQLite database.
- * Safe to re-run — uses INSERT OR IGNORE so existing rows are skipped.
- */
-
-import db from '../lib/db';
+import db, { ensureSchema } from '../lib/db';
+import { upsertHousehold, upsertGuest } from '../lib/guests';
 import seedData from '../data/seed.json';
 
 interface SeedGuest {
-  id: string;
-  firstName: string;
-  lastName: string;
-  phone: string;
-  email: string;
-  plusOneAllowed: boolean;
+  id: string; firstName: string; lastName: string;
+  phone: string; email: string; plusOneAllowed: boolean;
 }
+interface SeedHousehold { id: string; name: string; guests: SeedGuest[]; }
 
-interface SeedHousehold {
-  id: string;
-  name: string;
-  guests: SeedGuest[];
-}
+async function main() {
+  await ensureSchema();
 
-const insertHousehold = db.prepare(
-  'INSERT OR IGNORE INTO households (id, name) VALUES (?, ?)'
-);
-
-const insertGuest = db.prepare(`
-  INSERT OR IGNORE INTO guests
-    (id, household_id, first_name, last_name, phone, email, plus_one_allowed)
-  VALUES (?, ?, ?, ?, ?, ?, ?)
-`);
-
-const seedAll = db.transaction((households: SeedHousehold[]) => {
-  for (const h of households) {
-    insertHousehold.run(h.id, h.name);
+  for (const h of seedData.households as SeedHousehold[]) {
+    await upsertHousehold(h.id, h.name);
     for (const g of h.guests) {
-      insertGuest.run(
-        g.id,
-        h.id,
-        g.firstName,
-        g.lastName,
-        g.phone,
-        g.email,
-        g.plusOneAllowed ? 1 : 0
-      );
+      await upsertGuest({
+        id: g.id, householdId: h.id, firstName: g.firstName,
+        lastName: g.lastName, phone: g.phone, email: g.email,
+        plusOneAllowed: g.plusOneAllowed ? 1 : 0,
+      });
     }
   }
-});
 
-seedAll(seedData.households as SeedHousehold[]);
+  const count = (await db.execute('SELECT COUNT(*) as n FROM guests')).rows[0] as { n: number };
+  console.log(`✓ Seeded database — ${count.n} guest(s)`);
+}
 
-const count = (db.prepare('SELECT COUNT(*) as n FROM guests').get() as { n: number }).n;
-console.log(`✓ Seeded database — ${count} guest(s) in wedding.db`);
+main().catch((err) => { console.error(err); process.exit(1); });

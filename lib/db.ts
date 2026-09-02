@@ -1,69 +1,69 @@
 /**
  * lib/db.ts
  * ─────────────────────────────────────────────────────────────────────────────
- * SQLite database singleton via better-sqlite3.
+ * Turso / libSQL client singleton.
  *
- * Why better-sqlite3 over the async `sqlite3` package:
- *   - better-sqlite3 is synchronous, which avoids callback/Promise overhead for
- *     a low-concurrency app (a wedding has ~100–300 guests, not thousands of
- *     concurrent writers). Synchronous code is also easier to reason about and
- *     test without mocking async flows.
- *   - Next.js API routes run in an isolated Node.js process; a module-level
- *     singleton is safe and avoids reconnecting on every request.
+ * Local dev:  TURSO_DB_URL=file:data/wedding.db  (no auth token needed)
+ * Production: TURSO_DB_URL=libsql://your-db.turso.io
+ *             TURSO_AUTH_TOKEN=<token from Turso dashboard>
  *
- * Schema
- * ──────
- * households  — one row per invited group (family, couple, individual)
- * guests      — one row per person; many-to-one with households
- * rsvps       — one row per guest once they respond; separate from guests so
- *               the guest record stays clean and we can upsert responses safely
+ * Why libsql over better-sqlite3 for production?
+ *   better-sqlite3 writes to the local filesystem. On Vercel, the filesystem
+ *   is ephemeral — it resets on every deploy, wiping the database. Turso is
+ *   a hosted SQLite service with a persistent remote file, so data survives
+ *   deploys. The SQL dialect is identical; the only difference is the client
+ *   API is async (returns Promises) instead of synchronous.
  */
 
-import Database from 'better-sqlite3';
-import path from 'path';
-import fs from 'fs';
+import { createClient, type Client } from '@libsql/client';
 
-const DB_DIR  = path.join(process.cwd(), 'data');
-const DB_PATH = path.join(DB_DIR, 'wedding.db');
+function makeClient(): Client {
+  const url = process.env.TURSO_DB_URL ?? 'file:data/wedding.db';
+  const authToken = process.env.TURSO_AUTH_TOKEN; // undefined is fine for file://
+  return createClient({ url, authToken });
+}
 
-// Ensure the data directory exists (git-ignored; created at runtime)
-if (!fs.existsSync(DB_DIR)) fs.mkdirSync(DB_DIR, { recursive: true });
+// Module-level singleton — one connection shared across requests in the same
+// worker process (Next.js reuses workers across requests).
+const db = makeClient();
 
-const db = new Database(DB_PATH);
+// ── Schema bootstrap ──────────────────────────────────────────────────────────
+// Creates tables on first use if they don't exist. Safe to call many times.
+// Using a promise so concurrent first-requests don't race to create tables.
 
-// WAL mode: allows concurrent reads while a write is in progress.
-// Important if Next.js ever runs multiple worker processes.
-db.pragma('journal_mode = WAL');
-db.pragma('foreign_keys = ON');
+let _schemaReady: Promise<void> | null = null;
 
-// ── Schema ────────────────────────────────────────────────────────────────────
+export async function ensureSchema(): Promise<void> {
+  if (!_schemaReady) {
+    _schemaReady = db.executeMultiple(`
+      CREATE TABLE IF NOT EXISTS households (
+        id   TEXT PRIMARY KEY,
+        name TEXT NOT NULL
+      );
 
-db.exec(`
-  CREATE TABLE IF NOT EXISTS households (
-    id   TEXT PRIMARY KEY,
-    name TEXT NOT NULL
-  );
+      CREATE TABLE IF NOT EXISTS guests (
+        id               TEXT PRIMARY KEY,
+        household_id     TEXT NOT NULL REFERENCES households(id),
+        first_name       TEXT NOT NULL,
+        last_name        TEXT NOT NULL,
+        phone            TEXT NOT NULL,
+        email            TEXT NOT NULL DEFAULT '',
+        plus_one_allowed INTEGER NOT NULL DEFAULT 0,
+        UNIQUE(phone)
+      );
 
-  CREATE TABLE IF NOT EXISTS guests (
-    id               TEXT PRIMARY KEY,
-    household_id     TEXT NOT NULL REFERENCES households(id),
-    first_name       TEXT NOT NULL,
-    last_name        TEXT NOT NULL,
-    phone            TEXT NOT NULL,
-    email            TEXT NOT NULL DEFAULT '',
-    plus_one_allowed INTEGER NOT NULL DEFAULT 0,
-    UNIQUE(phone)
-  );
-
-  CREATE TABLE IF NOT EXISTS rsvps (
-    guest_id              TEXT PRIMARY KEY REFERENCES guests(id),
-    status                TEXT NOT NULL
-                            CHECK(status IN ('pending','attending','declined')),
-    dietary_notes         TEXT NOT NULL DEFAULT '',
-    plus_one_name         TEXT NOT NULL DEFAULT '',
-    plus_one_dietary_notes TEXT NOT NULL DEFAULT '',
-    submitted_at          TEXT NOT NULL
-  );
-`);
+      CREATE TABLE IF NOT EXISTS rsvps (
+        guest_id               TEXT PRIMARY KEY REFERENCES guests(id),
+        status                 TEXT NOT NULL
+                                 CHECK(status IN ('pending','attending','declined')),
+        dietary_notes          TEXT NOT NULL DEFAULT '',
+        plus_one_name          TEXT NOT NULL DEFAULT '',
+        plus_one_dietary_notes TEXT NOT NULL DEFAULT '',
+        submitted_at           TEXT NOT NULL
+      );
+    `);
+  }
+  return _schemaReady;
+}
 
 export default db;

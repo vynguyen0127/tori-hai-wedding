@@ -1,14 +1,3 @@
-/**
- * POST /api/rsvp/lookup
- *
- * Accepts a phone number, looks it up in the guest list, and returns the
- * household so the RSVP form can be pre-populated.
- *
- * Design decision — why not GET?
- *   We use POST because the request carries PII (a phone number). GET requests
- *   are logged by proxies and appear in browser history; POST body is not.
- */
-
 import { NextRequest, NextResponse } from 'next/server';
 import { normalizePhone } from '@/lib/phoneUtils';
 import { findHouseholdByPhone } from '@/lib/guests';
@@ -28,7 +17,7 @@ export async function POST(
       );
     }
 
-    const household = findHouseholdByPhone(normalized);
+    const household = await findHouseholdByPhone(normalized);
     if (!household) {
       return NextResponse.json(
         { error: "We couldn't find your invite. Please double-check your number or contact us directly." },
@@ -36,7 +25,6 @@ export async function POST(
       );
     }
 
-    // Strip fields that should never reach the client (emails, phone numbers)
     const safeGuests: SafeGuest[] = household.guests.map((g) => ({
       guestId:             g.guestId,
       firstName:           g.firstName,
@@ -55,9 +43,6 @@ export async function POST(
     });
   } catch (err) {
     console.error('[/api/rsvp/lookup]', err);
-    return NextResponse.json(
-      { error: 'Something went wrong. Please try again.' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Something went wrong. Please try again.' }, { status: 500 });
   }
 }

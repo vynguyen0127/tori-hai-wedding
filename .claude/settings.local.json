@@ -14,7 +14,9 @@
       "Bash(git push *)",
       "Bash(npx jest *)",
       "Bash(npm run *)",
-      "Bash(# Test *)"
+      "Bash(# Test *)",
+      "Bash(git rm *)",
+      "Bash(git commit -m 'Ignore SQLite WAL files and untrack them *)"
     ]
   }
 }

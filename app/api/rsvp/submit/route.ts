@@ -1,13 +1,3 @@
-/**
- * POST /api/rsvp/submit
- *
- * Validates and persists RSVP responses for a household.
- *
- * Security: we re-fetch each guestId from the DB and verify it belongs
- * to the claimed householdId before writing. This prevents a guest from
- * submitting RSVPs on behalf of someone outside their household.
- */
-
 import { NextRequest, NextResponse } from 'next/server';
 import { getGuestById, submitRsvp } from '@/lib/guests';
 import type { SubmitRequest, SubmitResponse, RsvpResponse, ApiError } from '@/types';
@@ -28,14 +18,10 @@ export async function POST(
       );
     }
 
-    // Validate each response and verify household ownership
     const sanitized: RsvpResponse[] = [];
     for (const r of responses) {
       if (!r.guestId) {
-        return NextResponse.json(
-          { error: 'Each response must include a guestId.' },
-          { status: 400 }
-        );
+        return NextResponse.json({ error: 'Each response must include a guestId.' }, { status: 400 });
       }
       if (!VALID_STATUSES.has(r.status)) {
         return NextResponse.json(
@@ -44,7 +30,7 @@ export async function POST(
         );
       }
 
-      const guest = getGuestById(r.guestId);
+      const guest = await getGuestById(r.guestId);
       if (!guest || guest.householdId !== householdId) {
         return NextResponse.json(
           { error: 'One or more guest IDs do not belong to the provided household.' },
@@ -52,8 +38,6 @@ export async function POST(
         );
       }
 
-      // Strip plus-one fields if not allowed — defense in depth against a
-      // manipulated client payload
       sanitized.push({
         guestId:             r.guestId,
         status:              r.status as 'attending' | 'declined',
@@ -63,8 +47,7 @@ export async function POST(
       });
     }
 
-    submitRsvp(sanitized);
-
+    await submitRsvp(sanitized);
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error('[/api/rsvp/submit]', err);

@@ -1,13 +1,3 @@
-/**
- * /admin
- *
- * Server component — data is fetched at request time on the server (no
- * client-side fetch needed). This keeps the guest data off the client
- * bundle entirely, and means the page renders fully on first load.
- *
- * Access is gated by middleware.ts (HTTP Basic Auth).
- */
-
 import { getAllGuests, getRsvpSummary } from '@/lib/guests';
 import type { Guest } from '@/types';
 
@@ -20,11 +10,9 @@ function StatusBadge({ status }: { status: Guest['rsvpStatus'] }) {
   return <span className={styles[status]}>{status}</span>;
 }
 
-export default function AdminPage() {
-  const guests  = getAllGuests();
-  const summary = getRsvpSummary();
+export default async function AdminPage() {
+  const [guests, summary] = await Promise.all([getAllGuests(), getRsvpSummary()]);
 
-  // Group by household for display
   const byHousehold = guests.reduce<Record<string, Guest[]>>((acc, g) => {
     (acc[g.householdId] ??= []).push(g);
     return acc;
@@ -37,13 +25,12 @@ export default function AdminPage() {
         <p className="admin-header__subtitle">Tori &amp; Hai · May 29, 2027</p>
       </header>
 
-      {/* ── Summary cards ──────────────────────────────────────────────────── */}
       <section className="admin-summary">
         {[
-          { label: 'Total Guests',  value: summary.total,     mod: '' },
-          { label: 'Attending',     value: summary.attending,  mod: '--attending' },
-          { label: 'Declined',      value: summary.declined,   mod: '--declined' },
-          { label: 'Pending',       value: summary.pending,    mod: '--pending' },
+          { label: 'Total Guests', value: summary.total,    mod: '' },
+          { label: 'Attending',    value: summary.attending, mod: '--attending' },
+          { label: 'Declined',     value: summary.declined,  mod: '--declined' },
+          { label: 'Pending',      value: summary.pending,   mod: '--pending' },
         ].map(({ label, value, mod }) => (
           <div key={label} className={`admin-stat admin-stat${mod}`}>
             <span className="admin-stat__value">{value}</span>
@@ -52,7 +39,6 @@ export default function AdminPage() {
         ))}
       </section>
 
-      {/* ── Dietary notes ──────────────────────────────────────────────────── */}
       {summary.dietaryNotes.length > 0 && (
         <section className="admin-section">
           <h2>Dietary Notes</h2>
@@ -62,7 +48,6 @@ export default function AdminPage() {
         </section>
       )}
 
-      {/* ── Guest list ─────────────────────────────────────────────────────── */}
       <section className="admin-section">
         <h2>Guest List</h2>
         <div className="admin-table-wrap">

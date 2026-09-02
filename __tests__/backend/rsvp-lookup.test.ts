@@ -71,7 +71,7 @@ describe('POST /api/rsvp/lookup', () => {
   });
 
   it('returns 404 if phone is not in the guest list', async () => {
-    mockFind.mockReturnValue(null);
+    mockFind.mockResolvedValue(null);
     const res = await POST(makeRequest({ phone: '8005559999' }));
     expect(res.status).toBe(404);
     const body = await res.json();
@@ -79,7 +79,7 @@ describe('POST /api/rsvp/lookup', () => {
   });
 
   it('returns 200 with household and safe guest fields on success', async () => {
-    mockFind.mockReturnValue(MOCK_HOUSEHOLD);
+    mockFind.mockResolvedValue(MOCK_HOUSEHOLD);
     const res = await POST(makeRequest({ phone: '(800) 555-1234' })); // formatted input
     expect(res.status).toBe(200);
 
@@ -98,7 +98,7 @@ describe('POST /api/rsvp/lookup', () => {
   });
 
   it('normalizes formatted phone numbers before lookup', async () => {
-    mockFind.mockReturnValue(MOCK_HOUSEHOLD);
+    mockFind.mockResolvedValue(MOCK_HOUSEHOLD);
     await POST(makeRequest({ phone: '+1 (800) 555-1234' }));
     expect(mockFind).toHaveBeenCalledWith('8005551234');
   });
