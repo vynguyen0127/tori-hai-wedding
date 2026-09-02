@@ -155,8 +155,8 @@ async function main() {
     });
   }
 
-  const guestCount = ((await db.execute('SELECT COUNT(*) as n FROM guests')).rows[0] as { n: number }).n;
-  const houseCount = ((await db.execute('SELECT COUNT(*) as n FROM households')).rows[0] as { n: number }).n;
+  const guestCount = ((await db.execute('SELECT COUNT(*) as n FROM guests')).rows[0] as unknown as { n: number }).n;
+  const houseCount = ((await db.execute('SELECT COUNT(*) as n FROM households')).rows[0] as unknown as { n: number }).n;
 
   console.log(`\n✓ Import complete`);
   console.log(`  ${valid.length} guest(s) upserted`);

@@ -22,7 +22,7 @@ async function main() {
     }
   }
 
-  const count = (await db.execute('SELECT COUNT(*) as n FROM guests')).rows[0] as { n: number };
+  const count = (await db.execute('SELECT COUNT(*) as n FROM guests')).rows[0] as unknown as { n: number };
   console.log(`✓ Seeded database — ${count.n} guest(s)`);
 }
 
