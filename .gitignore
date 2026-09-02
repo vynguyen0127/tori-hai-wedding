@@ -27,3 +27,5 @@ yarn-error.log*
 
 # SQLite database (created at runtime via npm run seed)
 /data/wedding.db
+/data/wedding.db-shm
+/data/wedding.db-wal
