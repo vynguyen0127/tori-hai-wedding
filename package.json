@@ -10,6 +10,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "seed": "npx tsx scripts/seed.ts",
+    "seed:csv": "npx tsx scripts/seed-csv.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -32,6 +33,7 @@
     "jest": "^30.5.1",
     "jest-environment-jsdom": "^30.5.1",
     "ts-jest": "^29.4.12",
+    "tsx": "^4.23.13",
     "typescript": "^6.0.3"
   }
 }
