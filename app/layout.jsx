@@ -1,5 +1,5 @@
 import './globals.css';
-import { Great_Vibes } from 'next/font/google';
+import { Great_Vibes, Playfair_Display } from 'next/font/google';
 import Navbar from '@/components/Navbar';
 
 const greatVibes = Great_Vibes({
@@ -9,20 +9,28 @@ const greatVibes = Great_Vibes({
   display: 'swap',
 });
 
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  style: ['normal', 'italic'],
+  variable: '--font-display',
+  display: 'swap',
+});
+
 export const metadata = {
-  title: 'Tori & Hai · May 29, 2027',
+  title: 'Victoria & Hai · May 29, 2027',
   description: 'Join us to celebrate our wedding!',
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={greatVibes.variable}>
+    <html lang="en" className={`${greatVibes.variable} ${playfair.variable}`}>
       <body>
         <div className="app">
           <Navbar />
           <main>{children}</main>
           <footer className="footer">
-            <p>Made with ♡ for Tori &amp; Hai · May 29, 2027</p>
+            <p>Made with ♡ for Victoria &amp; Hai · May 29, 2027</p>
           </footer>
         </div>
       </body>

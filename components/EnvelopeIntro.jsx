@@ -5,27 +5,24 @@ import { useState, useEffect } from 'react';
 /**
  * EnvelopeIntro
  * ─────────────────────────────────────────────────────────────────────────────
- * Full-screen envelope animation that plays on every home page visit.
+ * Full-screen envelope animation — plays once per browser session.
  *
  * Stages:
- *   entering  – envelope visible, sealed, waiting for click
- *   open      – flap folds away (clip-path collapses)
- *   rising    – invite card slides up out of the envelope
+ *   idle      – before useEffect (SSR + first paint); shows a plain cover
+ *   entering  – envelope sealed, waiting for the user's click
+ *   open      – flap folds away
+ *   rising    – invite card slides up; "Enter website" button appears
  *   done      – overlay unmounted
- *
- * After the card has risen an "Enter website" button appears.
  */
-
-
 export default function EnvelopeIntro() {
   const [stage, setStage]     = useState('idle');
   const [exiting, setExiting] = useState(false);
 
   useEffect(() => {
     if (sessionStorage.getItem('env-seen')) {
-      setStage('done');   // returning visitor — drop the cover instantly
+      setStage('done');   // returning visitor this session — skip straight away
     } else {
-      setStage('entering'); // first visit — show the envelope
+      setStage('entering');
     }
   }, []);
 
@@ -43,10 +40,9 @@ export default function EnvelopeIntro() {
 
   if (stage === 'done') return null;
 
-  // 'idle' = before useEffect has run (SSR + first client paint).
-  // Render a plain cover so the home page is never visible during the check.
+  // Blank sage cover during SSR / first paint — prevents home-page flash
   if (stage === 'idle') {
-    return <div style={{ position: 'fixed', inset: 0, background: '#f0f6fa', zIndex: 9999 }} />;
+    return <div style={{ position: 'fixed', inset: 0, background: '#e8f0e2', zIndex: 9999 }} />;
   }
 
   const flapOpen     = stage === 'open' || stage === 'rising';
@@ -70,28 +66,29 @@ export default function EnvelopeIntro() {
 
           {/* ── Invite card ──────────────────────────────────────────────── */}
           <div className={`env-card${stage === 'rising' ? ' env-card--up' : ''}`}>
-
             <p className="env-card__eyebrow">You are cordially invited</p>
             <div className="env-card__rule" />
-            <h2 className="env-card__names">Tori &amp; Hai</h2>
-            <p className="env-card__ornament">✦</p>
+            <h2 className="env-card__names">Victoria &amp; Hai</h2>
+            <p className="env-card__ornament">✿</p>
             <p className="env-card__date">Saturday, May 29th</p>
             <p className="env-card__year">2027</p>
           </div>
 
           {/* ── Pocket (envelope front face) ──────────────────────────────── */}
+          {/* Covers the full front from top corners through the bottom V,    */}
+          {/* so the card is completely hidden before the flap opens.         */}
           <div className="env-pocket" />
 
-          {/* ── Flap (no children — seal is a sibling to avoid clip-path) ─── */}
+          {/* ── Flap ─────────────────────────────────────────────────────── */}
           <div className={`env-flap${flapOpen ? ' env-flap--open' : ''}`} />
 
-          {/* ── Seal — positioned at the V-tip of the flap ────────────────── */}
+          {/* ── Wax seal — sibling of flap so clip-path never hides it ────── */}
           <div className={`env-seal${flapOpen ? ' env-seal--gone' : ''}`}>♡</div>
 
         </div>
       </div>
 
-      {/* Fixed-height footer so the envelope never shifts position */}
+      {/* Fixed-height footer so the envelope never shifts when button appears */}
       <div className="env-footer">
         {showEnterBtn ? (
           <button className="env-enter-btn" onClick={enter}>

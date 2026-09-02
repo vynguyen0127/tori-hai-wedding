@@ -1,6 +1,6 @@
 import PlaceholderPage from '@/components/PlaceholderPage';
 
-export const metadata = { title: 'Travel & Stay · Tori & Hai' };
+export const metadata = { title: 'Travel & Stay · Victoria & Hai' };
 
 export default function Travel() {
   return (

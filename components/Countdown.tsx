@@ -2,44 +2,48 @@
 
 import { useState, useEffect } from 'react';
 
-// UPDATE THIS DATE to match your actual wedding date + time
 const WEDDING_DATE = new Date('2027-05-29T17:00:00');
 
-function pad(n) {
+interface TimeLeft {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
+
+function pad(n: number): string {
   return String(n).padStart(2, '0');
 }
 
-function getTimeLeft() {
-  const now = new Date();
-  const diff = WEDDING_DATE - now;
+function getTimeLeft(): TimeLeft | null {
+  const diff = WEDDING_DATE.getTime() - Date.now();
   if (diff <= 0) return null;
-
-  const days    = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours   = Math.floor((diff / (1000 * 60 * 60)) % 24);
-  const minutes = Math.floor((diff / (1000 * 60)) % 60);
-  const seconds = Math.floor((diff / 1000) % 60);
-  return { days, hours, minutes, seconds };
+  return {
+    days:    Math.floor(diff / (1000 * 60 * 60 * 24)),
+    hours:   Math.floor((diff / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((diff / (1000 * 60)) % 60),
+    seconds: Math.floor((diff / 1000) % 60),
+  };
 }
 
 export default function Countdown() {
-  const [timeLeft, setTimeLeft] = useState(null);
+  const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
 
-  // Initialize on client only to avoid hydration mismatch
+  // Initialize on the client only — avoids a hydration mismatch between the
+  // server-rendered "0 days" and the actual value.
   useEffect(() => {
     setTimeLeft(getTimeLeft());
     const id = setInterval(() => setTimeLeft(getTimeLeft()), 1000);
     return () => clearInterval(id);
   }, []);
 
-  if (timeLeft === null) return null; // renders nothing on server
-
   if (!timeLeft) {
     return <div className="countdown-done">Today is the day! ♡</div>;
   }
 
   const units = [
-    { label: 'Days',    value: timeLeft.days         },
-    { label: 'Hours',   value: pad(timeLeft.hours)   },
+    { label: 'Days',    value: String(timeLeft.days) },
+    { label: 'Hours',   value: pad(timeLeft.hours) },
     { label: 'Minutes', value: pad(timeLeft.minutes) },
     { label: 'Seconds', value: pad(timeLeft.seconds) },
   ];

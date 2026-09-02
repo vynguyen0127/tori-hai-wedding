@@ -1,6 +1,6 @@
 import PlaceholderPage from '@/components/PlaceholderPage';
 
-export const metadata = { title: 'Gallery · Tori & Hai' };
+export const metadata = { title: 'Gallery · Victoria & Hai' };
 
 export default function Gallery() {
   return (

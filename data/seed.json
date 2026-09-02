@@ -1,0 +1,40 @@
+{
+  "households": [
+    {
+      "id": "h001",
+      "name": "The Nguyen Family",
+      "guests": [
+        {
+          "id": "g001",
+          "firstName": "Jane",
+          "lastName": "Nguyen",
+          "phone": "8005551001",
+          "email": "jane@example.com",
+          "plusOneAllowed": true
+        },
+        {
+          "id": "g002",
+          "firstName": "John",
+          "lastName": "Nguyen",
+          "phone": "8005551002",
+          "email": "john@example.com",
+          "plusOneAllowed": false
+        }
+      ]
+    },
+    {
+      "id": "h002",
+      "name": "Alex Smith",
+      "guests": [
+        {
+          "id": "g003",
+          "firstName": "Alex",
+          "lastName": "Smith",
+          "phone": "8005551003",
+          "email": "alex@example.com",
+          "plusOneAllowed": true
+        }
+      ]
+    }
+  ]
+}

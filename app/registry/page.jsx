@@ -1,6 +1,6 @@
 import PlaceholderPage from '@/components/PlaceholderPage';
 
-export const metadata = { title: 'Registry · Tori & Hai' };
+export const metadata = { title: 'Registry · Victoria & Hai' };
 
 export default function Registry() {
   return (

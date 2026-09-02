@@ -1,6 +1,6 @@
 import PlaceholderPage from '@/components/PlaceholderPage';
 
-export const metadata = { title: 'FAQ · Tori & Hai' };
+export const metadata = { title: 'FAQ · Victoria & Hai' };
 
 export default function FAQ() {
   return (

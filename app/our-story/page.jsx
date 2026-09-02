@@ -1,6 +1,6 @@
 import PlaceholderPage from '@/components/PlaceholderPage';
 
-export const metadata = { title: 'Our Story · Tori & Hai' };
+export const metadata = { title: 'Our Story · Victoria & Hai' };
 
 export default function OurStory() {
   return (

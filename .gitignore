@@ -24,3 +24,6 @@ yarn-error.log*
 .next/
 
 .env.local
+
+# SQLite database (created at runtime via npm run seed)
+/data/wedding.db

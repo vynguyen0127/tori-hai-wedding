@@ -1,6 +1,6 @@
 import PlaceholderPage from '@/components/PlaceholderPage';
 
-export const metadata = { title: 'Wedding Details · Tori & Hai' };
+export const metadata = { title: 'Wedding Details · Victoria & Hai' };
 
 export default function Details() {
   return (
