@@ -2,7 +2,7 @@
 
 Full-stack wedding RSVP platform built with Next.js, TypeScript, and SQLite. Guests look up their household by phone number and submit RSVPs; the couple receives email notifications and manages the guest list through a protected admin dashboard.
 
-**Live site:** [tori-hai-wedding.vercel.app](https://tori-hai-wedding.vercel.app)
+**Live site:** [nhi-wedding-website-wedding.vercel.app](https://nhi-wedding-website.vercel.app/)
 
 ---
 
