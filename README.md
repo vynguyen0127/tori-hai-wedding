@@ -1,70 +1,104 @@
-# Getting Started with Create React App
+# Tori & Hai — Wedding Website
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Full-stack wedding RSVP platform built with Next.js, TypeScript, and SQLite. Guests look up their household by phone number and submit RSVPs; the couple receives email notifications and manages the guest list through a protected admin dashboard.
 
-## Available Scripts
+**Live site:** [tori-hai-wedding.vercel.app](https://tori-hai-wedding.vercel.app)
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 15 (App Router) |
+| Language | TypeScript (strict mode) |
+| Database | SQLite via Turso (libSQL) |
+| Email | Resend |
+| Auth | HTTP Basic Auth (Next.js middleware) |
+| Hosting | Vercel |
+| Tests | Jest + React Testing Library |
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## Architecture
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**Frontend** — React server components for data-heavy pages (admin dashboard fetches on the server, sends finished HTML). Client components only where interactivity is needed (RSVP form wizard, CSV uploader).
 
-### `npm run build`
+**API routes** — Four serverless endpoints:
+- `POST /api/rsvp/lookup` — finds a household by phone number; strips PII from the response
+- `POST /api/rsvp/submit` — validates household ownership, writes RSVPs atomically via `db.batch()`, fires confirmation emails
+- `GET /api/admin/guests` — returns full guest list and RSVP summary stats
+- `POST /api/admin/import-csv` — accepts a CSV file upload, validates all rows before writing
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**Auth** — `middleware.ts` intercepts all `/admin` and `/api/admin/*` traffic before it reaches any route handler. Returns `401` with a `WWW-Authenticate` header if credentials are missing or wrong.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+**Database** — Single SQLite file locally (`file:data/wedding.db`), Turso hosted instance in production. Swapped by environment variable — no code changes between environments. Schema bootstrapped automatically on first request via `ensureSchema()`.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+**Email** — On RSVP submission, `sendRsvpNotification()` builds guest HTML once and sends two emails in parallel via `Promise.all`: an admin notification to the couple and a confirmation to the guest. Fired with `void` + `.catch` so a failed send never blocks the guest's response.
 
-### `npm run eject`
+**Types** — All domain and API types defined once in `types/index.ts` and imported across frontend, backend, and tests. Schema changes surface as TypeScript errors everywhere they break.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Key Files
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```
+app/
+  api/rsvp/lookup/route.ts      Phone lookup endpoint
+  api/rsvp/submit/route.ts      RSVP submission + email trigger
+  api/admin/guests/route.ts     Admin guest list
+  api/admin/import-csv/route.ts CSV bulk import
+  admin/page.tsx                Admin dashboard (server component)
+  rsvp/RsvpFlow.tsx             3-step RSVP wizard (client component)
+lib/
+  db.ts                         Turso client singleton + schema bootstrap
+  guests.ts                     Data access layer (all DB queries)
+  email.ts                      Email sending logic
+  emailTemplates.ts             HTML email templates
+  csv-import.ts                 Shared CSV parsing + validation
+  phoneUtils.ts                 Phone normalization
+middleware.ts                   HTTP Basic Auth
+types/index.ts                  Shared domain types
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+## Local Development
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+# Install dependencies
+npm install
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Copy env file and fill in values
+cp .env.local.example .env.local
 
-### Code Splitting
+# Run dev server
+npm run dev
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+`.env.local` variables:
 
-### Analyzing the Bundle Size
+```
+TURSO_DB_URL=file:data/wedding.db
+TURSO_AUTH_TOKEN=                   # leave blank for local file DB
+ADMIN_USER=admin
+ADMIN_PASS=changeme
+RESEND_API_KEY=
+ADMIN_EMAIL=
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Seed local database:
 
-### Making a Progressive Web App
+```bash
+npx ts-node --skip-project --compiler-options '{"resolveJsonModule":true,"module":"commonjs","baseUrl":".","paths":{"@/*":["*"]}}' scripts/seed.ts
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
+## Tests
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```bash
+npm test
+```
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Two Jest environments: `jsdom` for React component tests, `node` for API route tests. Backend tests mock the DB layer so no real database is needed.

@@ -2,3 +2,5 @@ household_id,household_name,guest_id,first_name,last_name,phone,email,plus_one_a
 h001,The Nguyen Family,g001,Jane,Nguyen,8005551001,jane@example.com,TRUE
 h001,The Nguyen Family,g002,John,Nguyen,8005551002,john@example.com,FALSE
 h002,Alex Smith,g003,Alex,Smith,8005551003,alex@example.com,TRUE
+h003,The Nguyen Family,g004,Vy,Nguyen,7348370784,vyknguyen01@gmail.com,FALSE
+h003,The Nguyen Family,g005,Van,Nguyen,7343774833,vynguyen@umich.edu,FALSE

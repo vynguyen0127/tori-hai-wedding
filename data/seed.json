@@ -35,6 +35,28 @@
           "plusOneAllowed": true
         }
       ]
+    },
+        {
+      "id": "h003",
+      "name": "The Nguyen Family",
+      "guests": [
+        {
+          "id": "g004",
+          "firstName": "Vy",
+          "lastName": "Nguyen",
+          "phone": "7348370784",
+          "email": "vyknguyen01@gmail.com",
+          "plusOneAllowed": true
+        },
+        {
+          "id": "g005",
+          "firstName": "Van",
+          "lastName": "Nguyen",
+          "phone": "7343774833",
+          "email": "vynguyen@umich.edu",
+          "plusOneAllowed": false
+        }
+      ]
     }
   ]
 }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getGuestById, submitRsvp } from '@/lib/guests';
 import type { SubmitRequest, SubmitResponse, RsvpResponse, ApiError } from '@/types';
+import { sendRsvpNotification } from '@/lib/email';
 
 const VALID_STATUSES = new Set<string>(['attending', 'declined']);
 
@@ -9,7 +10,7 @@ export async function POST(
 ): Promise<NextResponse<SubmitResponse | ApiError>> {
   try {
     const body: Partial<SubmitRequest> = await request.json();
-    const { householdId, responses } = body;
+    const { householdId, householdName, responses } = body;
 
     if (!householdId || !Array.isArray(responses) || responses.length === 0) {
       return NextResponse.json(
@@ -44,10 +45,17 @@ export async function POST(
         dietaryNotes:        r.dietaryNotes ?? '',
         plusOneName:         guest.plusOneAllowed ? (r.plusOneName ?? '') : '',
         plusOneDietaryNotes: guest.plusOneAllowed ? (r.plusOneDietaryNotes ?? '') : '',
+        email:               guest.email,
+        fullName:            guest.firstName + " " + guest.lastName
       });
     }
 
     await submitRsvp(sanitized);
+
+    void sendRsvpNotification(sanitized, householdName!).catch(err =>
+      console.error('failed to send RSVP notification', err)
+    );
+
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error('[/api/rsvp/submit]', err);

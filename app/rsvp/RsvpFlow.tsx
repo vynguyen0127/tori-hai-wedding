@@ -17,6 +17,7 @@ interface GuestFormState {
   dietaryNotes: string;
   plusOneName: string;
   plusOneDietaryNotes: string;
+  email: string
 }
 
 // ── Step 1: Phone lookup ──────────────────────────────────────────────────────
@@ -105,6 +106,7 @@ function HouseholdForm({ household, onSubmitted }: HouseholdFormProps) {
       dietaryNotes:        g.dietaryNotes,
       plusOneName:         g.plusOneName,
       plusOneDietaryNotes: g.plusOneDietaryNotes,
+      email:               ''
     }))
   );
   const [submitting, setSubmitting] = useState(false);
@@ -131,12 +133,15 @@ function HouseholdForm({ household, onSubmitted }: HouseholdFormProps) {
 
     const payload: SubmitRequest = {
       householdId: household.householdId,
+      householdName: household.householdName,
       responses: responses.map((r): RsvpResponse => ({
         guestId:             r.guestId,
         status:              r.status as 'attending' | 'declined',
         dietaryNotes:        r.dietaryNotes,
         plusOneName:         r.plusOneName,
         plusOneDietaryNotes: r.plusOneDietaryNotes,
+        email:               r.email,
+        fullName:            ""
       })),
     };
 
@@ -190,6 +195,13 @@ function HouseholdForm({ household, onSubmitted }: HouseholdFormProps) {
 
               {r.status === 'attending' && (
                 <div className="guest-card__details">
+                  <label className="guest-card__label" htmlFor={`email-${guest.guestId}`}>
+                    Email (optional)
+                  </label>
+                  <input id={`email-${guest.guestId}`} type="email" className="guest-card__input"
+                    value={r.email}
+                    onChange={(e) => update(guest.guestId, 'email', e.target.value)} />
+
                   <label className="guest-card__label" htmlFor={`dietary-${guest.guestId}`}>
                     Dietary restrictions or allergies
                   </label>
@@ -241,6 +253,7 @@ interface ConfirmationProps {
 function Confirmation({ responses }: ConfirmationProps) {
   const attending = responses.filter((r) => r.status === 'attending');
   const declined  = responses.filter((r) => r.status === 'declined');
+  const plusOneCount = attending.filter(g => g.plusOneName).length;
 
   return (
     <div className="rsvp-step rsvp-step--confirmation">
@@ -262,7 +275,7 @@ function Confirmation({ responses }: ConfirmationProps) {
       )}
       <div className="rsvp-confirmation__summary">
         {attending.length > 0 && (
-          <p><strong>Attending:</strong> {attending.length} guest{attending.length > 1 ? 's' : ''}</p>
+          <p><strong>Attending:</strong> {attending.length + plusOneCount} guest{attending.length > 1 ? 's' : ''}</p>
         )}
         {declined.length > 0 && (
           <p><strong>Unable to attend:</strong> {declined.length} guest{declined.length > 1 ? 's' : ''}</p>

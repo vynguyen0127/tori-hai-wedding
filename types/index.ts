@@ -31,7 +31,7 @@ export interface LookupRequest {
   phone: string;
 }
 
-// Subset of Guest fields safe to send to the client (no phone, no email)
+// Subset of Guest fields safe to send to the client (no phone)
 export interface SafeGuest {
   guestId: string;
   firstName: string;
@@ -41,6 +41,7 @@ export interface SafeGuest {
   plusOneAllowed: boolean;
   plusOneName: string;
   plusOneDietaryNotes: string;
+  email: string;
 }
 
 export interface LookupResponse {
@@ -56,10 +57,13 @@ export interface RsvpResponse {
   dietaryNotes: string;
   plusOneName: string;
   plusOneDietaryNotes: string;
+  email: string
+  fullName: string
 }
 
 export interface SubmitRequest {
   householdId: string;
+  householdName: string;
   responses: RsvpResponse[];
 }
 

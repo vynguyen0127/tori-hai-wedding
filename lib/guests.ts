@@ -121,16 +121,17 @@ export async function submitRsvp(responses: RsvpResponse[]): Promise<void> {
     responses.map((r) => ({
       sql: `
         INSERT INTO rsvps
-          (guest_id, status, dietary_notes, plus_one_name, plus_one_dietary_notes, submitted_at)
-        VALUES (?, ?, ?, ?, ?, ?)
+          (guest_id, status, dietary_notes, email, plus_one_name, plus_one_dietary_notes, submitted_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(guest_id) DO UPDATE SET
           status                 = excluded.status,
+          email                  = excluded.email,
           dietary_notes          = excluded.dietary_notes,
           plus_one_name          = excluded.plus_one_name,
           plus_one_dietary_notes = excluded.plus_one_dietary_notes,
           submitted_at           = excluded.submitted_at
       `,
-      args: [r.guestId, r.status, r.dietaryNotes, r.plusOneName, r.plusOneDietaryNotes, now],
+      args: [r.guestId, r.status, r.dietaryNotes, r.email, r.plusOneName, r.plusOneDietaryNotes, now],
     })),
     'write'
   );
@@ -139,10 +140,11 @@ export async function submitRsvp(responses: RsvpResponse[]): Promise<void> {
 export async function getRsvpSummary(): Promise<RsvpSummary> {
   const guests   = await getAllGuests();
   const attending = guests.filter((g) => g.rsvpStatus === 'attending');
+  const plusOneCount = attending.filter(g => g.plusOneName).length;
 
   return {
-    total:        guests.length,
-    attending:    attending.length,
+    total:        guests.length + plusOneCount,
+    attending:    attending.length + plusOneCount,
     declined:     guests.filter((g) => g.rsvpStatus === 'declined').length,
     pending:      guests.filter((g) => g.rsvpStatus === 'pending').length,
     dietaryNotes: attending.map((g) => g.dietaryNotes).filter(Boolean),

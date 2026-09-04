@@ -57,6 +57,7 @@ export async function ensureSchema(): Promise<void> {
         status                 TEXT NOT NULL
                                  CHECK(status IN ('pending','attending','declined')),
         dietary_notes          TEXT NOT NULL DEFAULT '',
+        email                  TEXT NOT NULL DEFAULT '',
         plus_one_name          TEXT NOT NULL DEFAULT '',
         plus_one_dietary_notes TEXT NOT NULL DEFAULT '',
         submitted_at           TEXT NOT NULL
