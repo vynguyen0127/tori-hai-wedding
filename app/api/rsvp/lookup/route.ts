@@ -34,6 +34,7 @@ export async function POST(
       plusOneAllowed:      g.plusOneAllowed,
       plusOneName:         g.plusOneName,
       plusOneDietaryNotes: g.plusOneDietaryNotes,
+      email:               '',
     }));
 
     return NextResponse.json({
