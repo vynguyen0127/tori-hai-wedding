@@ -10,6 +10,7 @@ const tabs = [
   { label: 'Details',       path: '/details'      },
   { label: 'Wedding Party', path: '/wedding-party' },
   { label: 'Gallery',       path: '/gallery'      },
+  { label: 'Seating',       path: '/seating'      },
   { label: 'Registry',      path: '/registry'     },
   { label: 'RSVP',          path: '/rsvp'         },
   { label: 'Travel & Stay', path: '/travel'       },

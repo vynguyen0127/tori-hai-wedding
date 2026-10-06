@@ -44,8 +44,19 @@ export function adminNotificationTemplate(householdName: string, guestHtml: stri
                 </html>`
 }
 
-export function guestConfirmationTemplate(householdName: string, guestHtml: string): string {
-    return `
+export function guestConfirmationTemplate(householdName: string, body: string, fallbackEnabled: boolean): string {
+    return fallbackEnabled ? 
+    `<!DOCTYPE html>
+  ...
+  <div class="body">
+    ${body}         <!-- Claude's generated content goes here -->
+
+    <div class="details-box">
+      ...event details...
+    </div>
+  </div>
+  ...`
+    : `
     <!DOCTYPE html>
 <html>
   <head>
@@ -91,7 +102,7 @@ export function guestConfirmationTemplate(householdName: string, guestHtml: stri
 
         <div class="summary-label">Your RSVP Summary</div>
 
-        ${guestHtml}
+        ${body}
 
         <div class="details-box">
           <strong>Event Details</strong>

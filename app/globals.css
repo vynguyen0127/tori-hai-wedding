@@ -582,10 +582,22 @@ main { flex: 1; }
 }
 
 /* ── Envelope structure ────────────────────────────────────────────────────── */
+
+/*
+ * Z-order (lowest → highest):
+ *   1  env-body    — envelope back wall
+ *   2  env-card    — invite card (rises above envelope, stacks on top)
+ *   3  env-pocket  — front face of envelope, hides card bottom half
+ *   4  env-flap    — hinged flap (rotates back in 3D)
+ *   5  env-seal    — wax seal (fades out with flap)
+ */
+
 .env-wrap {
   position: relative;
   width: 340px;
   height: 220px;
+  /* Establish 3D context for flap rotation */
+  perspective: 900px;
 }
 
 @media (max-width: 400px) {
@@ -602,13 +614,13 @@ main { flex: 1; }
   box-shadow: 0 14px 50px rgba(10, 25, 15, 0.38);
 }
 
-/* Invite card — sits inside the envelope, slides up on 'rising' */
+/* Invite card — tucked inside, slides up and then settles on top */
 .env-card {
   position: absolute;
   left: 20px;
   right: 20px;
   bottom: 0;
-  height: 190px;
+  height: 192px;
   background: #f8f4ec;
   z-index: 2;
   display: flex;
@@ -617,18 +629,31 @@ main { flex: 1; }
   justify-content: center;
   padding: 16px;
   text-align: center;
-  transition: transform 1s cubic-bezier(0.25, 0.8, 0.25, 1);
-  overflow: hidden;
-  border-top-left-radius: 1px;
-  border-top-right-radius: 1px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  /* Two-phase transition: rise up, then settle down */
+  transition:
+    transform 0.85s cubic-bezier(0.25, 0.8, 0.25, 1),
+    z-index 0s linear 0s;
 }
 
-.env-card--up { transform: translateY(-225px); }
+/* Phase 1: card pulls up, clearing the envelope top */
+.env-card--rising {
+  transform: translateY(-230px);
+  z-index: 6;
+}
 
-/* Front face — covers the full envelope face, meeting the flap at its V-tip.
-   The shape: top-left → V-tip center → top-right → bottom-right → bottom-left.
-   Combined with the flap triangle above it, the entire envelope face is covered
-   so the card is completely hidden before the flap opens. */
+/* Phase 2: card settles, centered on top of the envelope */
+.env-card--stacked {
+  transform: translateY(-185px);
+  z-index: 6;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+  transition: transform 0.55s cubic-bezier(0.34, 1.3, 0.64, 1);
+}
+
+/* Front face — hides the card while the flap is closed.
+   Shape: covers the upper region up to where the V-flap sits. */
 .env-pocket {
   position: absolute;
   inset: 0;
@@ -638,26 +663,40 @@ main { flex: 1; }
   clip-path: polygon(0 0, 50% 65%, 100% 0, 100% 100%, 0 100%);
 }
 
-/* Flap — V-triangle at the top; collapses flat when open */
+/* Flap — hinged at the top edge, folds backward (rotateX) */
 .env-flap {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 65%;
   background: #2d5a3d;
   z-index: 4;
-  clip-path: polygon(0 0, 100% 0, 100% 2%, 50% 65%, 0 2%);
-  transition: clip-path 0.95s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 3px 3px 0 0;
+  /* V-triangle shape */
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  /* Rotate around the TOP edge */
+  transform-origin: top center;
+  transform: rotateX(0deg);
+  transition:
+    transform 0.9s cubic-bezier(0.4, 0, 0.2, 1),
+    z-index 0s linear 0s;
 }
 
+/* Open: rotate flap backward. z-index drops to 0 at the halfway point (~0.45s)
+   so the still-rotating flap slips behind the envelope body and stays hidden. */
 .env-flap--open {
-  clip-path: polygon(0 0, 100% 0, 100% 0%, 50% 0%, 0 0%);
+  transform: rotateX(-180deg);
+  z-index: 0;
+  transition:
+    transform 0.9s cubic-bezier(0.4, 0, 0.2, 1),
+    z-index 0s linear 0.45s;
 }
 
-/* Wax seal — sibling of flap so it is never clipped */
+/* Wax seal — on top of flap, fades out as flap opens */
 .env-seal {
   position: absolute;
   left: 50%;
-  top: 65%;
+  top: 58%;
   transform: translate(-50%, -50%);
   z-index: 5;
   width: 34px;
@@ -671,7 +710,8 @@ main { flex: 1; }
   font-size: 0.95rem;
   line-height: 1;
   box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-  transition: opacity 0.35s ease, transform 0.35s ease;
+  transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s;
+  pointer-events: none;
 }
 
 .env-seal--gone {
@@ -915,6 +955,24 @@ main { flex: 1; }
 .admin-badge--declined  { background: #faeaea; color: #a05050; }
 .admin-badge--pending   { background: #fff8f0; color: #8b6f4e; }
 
+.admin-table-input {
+  width: 60px;
+  padding: 0.25rem 0.4rem;
+  border: 1px solid #d4c4b0;
+  border-radius: 3px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  text-align: center;
+  color: #4a3728;
+  background: #faf7f3;
+  transition: border-color 0.15s;
+}
+.admin-table-input:focus {
+  outline: none;
+  border-color: #5E8A6E;
+}
+.admin-table-input:disabled { opacity: 0.5; }
+
 /* ── CSV Upload ───────────────────────────────────────────────────────────────── */
 
 .csv-upload__dropzone {
@@ -978,4 +1036,269 @@ main { flex: 1; }
 
 .csv-upload__result--error li {
   margin: 0.2rem 0;
+}
+
+/* ── Gallery ─────────────────────────────────────────────────────────────── */
+
+.gallery-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+}
+
+.gallery-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.gallery-header__eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #b8912a;
+  margin-bottom: 0.5rem;
+}
+
+.gallery-header__title {
+  font-family: var(--font-script), 'Great Vibes', cursive;
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  font-weight: 400;
+  color: #1e3d2a;
+  margin-bottom: 0.5rem;
+}
+
+.gallery-header__subtitle {
+  font-size: 0.95rem;
+  color: #7a9880;
+}
+
+.gallery-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem 0 4rem;
+}
+
+.polaroid {
+  background: #fff;
+  border: none;
+  cursor: pointer;
+  padding: 12px 12px 48px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.1);
+  transform: rotate(var(--rotation, 0deg));
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  flex-shrink: 0;
+  width: 220px;
+}
+
+.polaroid:hover {
+  transform: rotate(0deg) scale(1.05);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.22), 0 2px 6px rgba(0,0,0,0.12);
+  z-index: 10;
+  position: relative;
+}
+
+.polaroid__photo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: #e8e4de;
+}
+
+.polaroid__img {
+  object-fit: cover;
+}
+
+.polaroid__caption {
+  height: 36px;
+}
+
+.gallery-empty {
+  text-align: center;
+  color: #7a9880;
+  font-size: 1rem;
+  margin-top: 4rem;
+}
+
+/* ── Lightbox ─────────────────────────────────────────────────────────────── */
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 8, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.lightbox__img-wrap {
+  position: relative;
+  width: min(90vw, 90vh);
+  height: min(90vw, 90vh);
+}
+
+.lightbox__img {
+  object-fit: contain;
+}
+
+.lightbox__close {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.5rem;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  opacity: 0.7;
+  line-height: 1;
+  z-index: 10;
+}
+
+.lightbox__close:hover { opacity: 1; }
+
+.lightbox__arrow {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 3rem;
+  cursor: pointer;
+  padding: 1rem;
+  opacity: 0.6;
+  line-height: 1;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.lightbox__arrow:hover { opacity: 1; }
+
+.lightbox__counter {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255,255,255,0.6);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+}
+
+/* ── Seating chart ─────────────────────────────────────────────────────────── */
+
+.seating-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+}
+
+.seating-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.seating-header__eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #b8912a;
+  margin: 0 0 0.5rem;
+}
+
+.seating-header__title {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 400;
+  color: #1C1B19;
+  margin: 0 0 0.6rem;
+}
+
+.seating-header__subtitle {
+  font-size: 0.9rem;
+  color: #7a9880;
+  margin: 0;
+}
+
+/* Sticky search bar */
+.seating-search-bar {
+  position: sticky;
+  top: 64px; /* clears the navbar */
+  z-index: 10;
+  background: #f7f3ed;
+  padding: 0.75rem 0;
+  margin-bottom: 2rem;
+}
+
+.seating-search {
+  width: 100%;
+  padding: 0.75rem 1.1rem;
+  border: 1.5px solid #d4c4b0;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: #1C1B19;
+  background: #fff;
+  transition: border-color 0.2s;
+}
+
+.seating-search:focus {
+  outline: none;
+  border-color: #5E8A6E;
+}
+
+.seating-search::placeholder { color: #b0a898; }
+
+/* Empty state */
+.seating-empty {
+  text-align: center;
+  color: #9a8a7a;
+  font-size: 1rem;
+  margin-top: 3rem;
+  font-style: italic;
+}
+
+/* Table grid */
+.seating-tables {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.seating-table {
+  background: #fff;
+  border: 1px solid #e8ddd0;
+  border-radius: 6px;
+  padding: 1.25rem 1.25rem 1rem;
+}
+
+.seating-table__number {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #b8912a;
+  margin: 0 0 0.75rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid #f0e8d8;
+  letter-spacing: 0.04em;
+}
+
+.seating-table__guests {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.seating-table__guest {
+  font-size: 0.9rem;
+  color: #4a3728;
+  padding: 0.2rem 0;
+}
+
+.seating-table__guest--match {
+  font-weight: 600;
+  color: #2d5a3d;
 }

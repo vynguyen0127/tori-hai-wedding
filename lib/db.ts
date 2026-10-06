@@ -49,6 +49,7 @@ export async function ensureSchema(): Promise<void> {
         phone            TEXT NOT NULL,
         email            TEXT NOT NULL DEFAULT '',
         plus_one_allowed INTEGER NOT NULL DEFAULT 0,
+        table_number     INTEGER,
         UNIQUE(phone)
       );
 

@@ -16,6 +16,7 @@ export interface Guest {
   plusOneName: string;
   plusOneDietaryNotes: string;
   rsvpSubmittedAt: string;
+  tableNumber: number | null;
 }
 
 export interface Household {
@@ -74,6 +75,13 @@ export interface SubmitResponse {
 // Generic API error shape
 export interface ApiError {
   error: string;
+}
+
+// ── Seating chart ─────────────────────────────────────────────────────────────
+
+export interface SeatingRow {
+  name: string;
+  tableNumber: number | null;
 }
 
 // ── Admin types ───────────────────────────────────────────────────────────────

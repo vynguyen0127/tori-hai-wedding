@@ -5,7 +5,7 @@
  */
 
 import db, { ensureSchema } from './db';
-import type { Guest, Household, RsvpResponse, RsvpSummary } from '@/types';
+import type { Guest, Household, RsvpResponse, RsvpSummary, SeatingRow } from '@/types';
 
 // ── Row type (raw DB output) ──────────────────────────────────────────────────
 
@@ -18,6 +18,7 @@ interface GuestRow {
   phone: string;
   email: string;
   plus_one_allowed: number;
+  table_number: number | null;
   rsvp_status: string;
   dietary_notes: string;
   plus_one_name: string;
@@ -37,6 +38,7 @@ const GUEST_SELECT = `
     g.phone,
     g.email,
     g.plus_one_allowed,
+    g.table_number,
     COALESCE(r.status, 'pending')          AS rsvp_status,
     COALESCE(r.dietary_notes, '')          AS dietary_notes,
     COALESCE(r.plus_one_name, '')          AS plus_one_name,
@@ -64,6 +66,7 @@ function rowToGuest(row: GuestRow): Guest {
     plusOneName:         row.plus_one_name ?? '',
     plusOneDietaryNotes: row.plus_one_dietary_notes ?? '',
     rsvpSubmittedAt:     row.rsvp_submitted_at ?? '',
+    tableNumber:         row.table_number ?? null,
   };
 }
 
@@ -149,6 +152,37 @@ export async function getRsvpSummary(): Promise<RsvpSummary> {
     pending:      guests.filter((g) => g.rsvpStatus === 'pending').length,
     dietaryNotes: attending.map((g) => g.dietaryNotes).filter(Boolean),
   };
+}
+
+export async function setTableNumber(guestId: string, tableNumber: number | null): Promise<void> {
+  await ensureSchema();
+  await db.execute({
+    sql: `UPDATE guests SET table_number = ? WHERE id = ?`,
+    args: [tableNumber, guestId],
+  });
+}
+
+export async function getSeatingChart(): Promise<SeatingRow[]> {
+  await ensureSchema();
+  const result = await db.execute(`
+    SELECT
+      g.first_name || ' ' || g.last_name AS name,
+      g.table_number,
+      r.plus_one_name
+    FROM guests g
+    INNER JOIN rsvps r ON r.guest_id = g.id
+    WHERE r.status = 'attending'
+    ORDER BY g.table_number, g.last_name, g.first_name
+  `);
+
+  const rows: SeatingRow[] = [];
+  for (const row of result.rows as unknown as { name: string; table_number: number | null; plus_one_name: string | null }[]) {
+    rows.push({ name: row.name, tableNumber: row.table_number });
+    if (row.plus_one_name) {
+      rows.push({ name: row.plus_one_name, tableNumber: row.table_number });
+    }
+  }
+  return rows;
 }
 
 // ── Bulk upsert (used by seed scripts) ───────────────────────────────────────

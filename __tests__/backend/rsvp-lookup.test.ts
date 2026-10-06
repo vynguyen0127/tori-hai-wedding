@@ -49,6 +49,7 @@ const MOCK_HOUSEHOLD: Household = {
       plusOneName:         '',
       plusOneDietaryNotes: '',
       rsvpSubmittedAt:     '',
+      tableNumber:         null,
     },
   ],
 };

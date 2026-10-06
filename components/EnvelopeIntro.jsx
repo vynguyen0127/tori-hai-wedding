@@ -4,14 +4,13 @@ import { useState, useEffect } from 'react';
 
 /**
  * EnvelopeIntro
- * ─────────────────────────────────────────────────────────────────────────────
- * Full-screen envelope animation — plays once per browser session.
  *
  * Stages:
- *   idle      – before useEffect (SSR + first paint); shows a plain cover
- *   entering  – envelope sealed, waiting for the user's click
- *   open      – flap folds away
- *   rising    – invite card slides up; "Enter website" button appears
+ *   idle      – SSR / first paint, plain cover
+ *   entering  – sealed envelope, waiting for click
+ *   opening   – flap folds back (perspective rotate)
+ *   rising    – card slides up out of envelope
+ *   stacked   – card settles on top of envelope; "Enter" button appears
  *   done      – overlay unmounted
  */
 export default function EnvelopeIntro() {
@@ -20,7 +19,7 @@ export default function EnvelopeIntro() {
 
   useEffect(() => {
     if (sessionStorage.getItem('env-seen')) {
-      setStage('done');   // returning visitor this session — skip straight away
+      setStage('done');
     } else {
       setStage('entering');
     }
@@ -28,8 +27,11 @@ export default function EnvelopeIntro() {
 
   function openEnvelope() {
     if (stage !== 'entering') return;
-    setStage('open');
-    setTimeout(() => setStage('rising'), 1100);
+    setStage('opening');
+    // flap folds: 900ms → start pulling card
+    setTimeout(() => setStage('rising'),  900);
+    // card clears envelope top: 900 + 800ms → settle stacked
+    setTimeout(() => setStage('stacked'), 1700);
   }
 
   function enter() {
@@ -39,15 +41,14 @@ export default function EnvelopeIntro() {
   }
 
   if (stage === 'done') return null;
-
-  // Blank sage cover during SSR / first paint — prevents home-page flash
   if (stage === 'idle') {
     return <div style={{ position: 'fixed', inset: 0, background: '#e8f0e2', zIndex: 9999 }} />;
   }
 
-  const flapOpen     = stage === 'open' || stage === 'rising';
-  const showEnterBtn = stage === 'rising';
-  const clickable    = stage === 'entering';
+  const flapOpen  = stage === 'opening' || stage === 'rising' || stage === 'stacked';
+  const isRising  = stage === 'rising'  || stage === 'stacked';
+  const isStacked = stage === 'stacked';
+  const clickable = stage === 'entering';
 
   return (
     <div
@@ -61,11 +62,15 @@ export default function EnvelopeIntro() {
       <div className="env-scene" onClick={clickable ? openEnvelope : (e) => e.stopPropagation()}>
         <div className="env-wrap">
 
-          {/* ── Envelope back wall ───────────────────────────────────────── */}
+          {/* Envelope back wall */}
           <div className="env-body" />
 
-          {/* ── Invite card ──────────────────────────────────────────────── */}
-          <div className={`env-card${stage === 'rising' ? ' env-card--up' : ''}`}>
+          {/* Invite card */}
+          <div className={[
+            'env-card',
+            isRising  ? 'env-card--rising'  : '',
+            isStacked ? 'env-card--stacked' : '',
+          ].filter(Boolean).join(' ')}>
             <p className="env-card__eyebrow">You are cordially invited</p>
             <div className="env-card__rule" />
             <h2 className="env-card__names">Victoria &amp; Hai</h2>
@@ -74,23 +79,20 @@ export default function EnvelopeIntro() {
             <p className="env-card__year">2027</p>
           </div>
 
-          {/* ── Pocket (envelope front face) ──────────────────────────────── */}
-          {/* Covers the full front from top corners through the bottom V,    */}
-          {/* so the card is completely hidden before the flap opens.         */}
+          {/* Pocket — front face of envelope, hides card before flap opens */}
           <div className="env-pocket" />
 
-          {/* ── Flap ─────────────────────────────────────────────────────── */}
+          {/* Flap — folds back using perspective rotate */}
           <div className={`env-flap${flapOpen ? ' env-flap--open' : ''}`} />
 
-          {/* ── Wax seal — sibling of flap so clip-path never hides it ────── */}
+          {/* Wax seal */}
           <div className={`env-seal${flapOpen ? ' env-seal--gone' : ''}`}>♡</div>
 
         </div>
       </div>
 
-      {/* Fixed-height footer so the envelope never shifts when button appears */}
       <div className="env-footer">
-        {showEnterBtn ? (
+        {isStacked ? (
           <button className="env-enter-btn" onClick={enter}>
             Enter website
           </button>
