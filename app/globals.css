@@ -1302,3 +1302,139 @@ main { flex: 1; }
   font-weight: 600;
   color: #2d5a3d;
 }
+
+/* ── Our Story ─────────────────────────────────────────────────────────────── */
+
+.story-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 6rem;
+}
+
+.story-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.story-header__eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #b8912a;
+  margin: 0 0 0.5rem;
+}
+
+.story-header__title {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 400;
+  color: #1C1B19;
+  margin: 0;
+}
+
+.story-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+}
+
+.story-section {
+  position: relative;
+}
+
+/* Side-by-side layout */
+.story-section__content {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+
+.story-section__content--reverse {
+  flex-direction: row-reverse;
+}
+
+.story-section__text {
+  flex: 1;
+  padding-left: 1.5rem;
+  border-left: 2px solid #d4c4a0;
+}
+
+.story-section__content--reverse .story-section__text {
+  padding-left: 0;
+  border-left: none;
+  padding-right: 1.5rem;
+  border-right: 2px solid #d4c4a0;
+}
+
+.story-section__photo {
+  flex: 0 0 300px;
+  height: 380px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.story-section__photo--placeholder {
+  background: #e8ddd0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b0a090;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border: 1.5px dashed #c8b8a0;
+}
+
+@media (max-width: 680px) {
+  .story-section__content,
+  .story-section__content--reverse {
+    flex-direction: column;
+  }
+
+  .story-section__text,
+  .story-section__content--reverse .story-section__text {
+    padding-left: 1.5rem;
+    padding-right: 0;
+    border-left: 2px solid #d4c4a0;
+    border-right: none;
+    width: 100%;
+  }
+
+  .story-section__photo {
+    flex: none;
+    width: 100%;
+    height: 260px;
+  }
+}
+
+.story-section__label {
+  font-size: 0.68rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: #b8912a;
+  margin-bottom: 0.4rem;
+}
+
+.story-section__title {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: #2d5a3d;
+  margin: 0 0 1.25rem;
+}
+
+.story-section__body p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #4a3728;
+  margin: 0 0 1rem;
+}
+
+.story-section__body p:last-child {
+  margin-bottom: 0;
+}
+
+.story-section__body em {
+  font-style: italic;
+  color: #2d5a3d;
+}
