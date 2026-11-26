@@ -11,10 +11,14 @@ export interface Guest {
   phone: string;
   email: string;
   plusOneAllowed: boolean;
+  teaCeremonyInvite: boolean;
+  ceremonyInvite: boolean;
   rsvpStatus: RsvpStatus;
   dietaryNotes: string;
   plusOneName: string;
   plusOneDietaryNotes: string;
+  teaCeremonyRsvp: 'attending' | 'declined' | null;
+  ceremonyRsvp: 'attending' | 'declined' | null;
   rsvpSubmittedAt: string;
   tableNumber: number | null;
 }
@@ -40,6 +44,10 @@ export interface SafeGuest {
   rsvpStatus: RsvpStatus;
   dietaryNotes: string;
   plusOneAllowed: boolean;
+  teaCeremonyInvite: boolean;
+  ceremonyInvite: boolean;
+  teaCeremonyRsvp: 'attending' | 'declined' | null;
+  ceremonyRsvp: 'attending' | 'declined' | null;
   plusOneName: string;
   plusOneDietaryNotes: string;
   email: string;
@@ -55,11 +63,13 @@ export interface LookupResponse {
 export interface RsvpResponse {
   guestId: string;
   status: 'attending' | 'declined';
+  teaCeremonyRsvp: 'attending' | 'declined' | null;
+  ceremonyRsvp: 'attending' | 'declined' | null;
   dietaryNotes: string;
   plusOneName: string;
   plusOneDietaryNotes: string;
-  email: string
-  fullName: string
+  email: string;
+  fullName: string;
 }
 
 export interface SubmitRequest {

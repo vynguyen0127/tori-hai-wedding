@@ -19,10 +19,14 @@ interface GuestRow {
   email: string;
   plus_one_allowed: number;
   table_number: number | null;
+  tea_ceremony_invite: number;
+  ceremony_invite: number;
   rsvp_status: string;
   dietary_notes: string;
   plus_one_name: string;
   plus_one_dietary_notes: string;
+  tea_ceremony_rsvp: 'attending' | 'declined' | null;
+  ceremony_rsvp: 'attending' | 'declined' | null;
   rsvp_submitted_at: string | null;
 }
 
@@ -39,10 +43,14 @@ const GUEST_SELECT = `
     g.email,
     g.plus_one_allowed,
     g.table_number,
+    g.tea_ceremony_invite,
+    g.ceremony_invite,
     COALESCE(r.status, 'pending')          AS rsvp_status,
     COALESCE(r.dietary_notes, '')          AS dietary_notes,
     COALESCE(r.plus_one_name, '')          AS plus_one_name,
     COALESCE(r.plus_one_dietary_notes, '') AS plus_one_dietary_notes,
+    r.tea_ceremony_rsvp,
+    r.ceremony_rsvp,
     r.submitted_at                         AS rsvp_submitted_at
   FROM guests g
   JOIN households h ON h.id = g.household_id
@@ -61,10 +69,14 @@ function rowToGuest(row: GuestRow): Guest {
     phone:               row.phone,
     email:               row.email,
     plusOneAllowed:      row.plus_one_allowed === 1,
+    teaCeremonyInvite:   row.tea_ceremony_invite === 1,
+    ceremonyInvite:      row.ceremony_invite === 1,
     rsvpStatus:          (row.rsvp_status ?? 'pending') as Guest['rsvpStatus'],
     dietaryNotes:        row.dietary_notes ?? '',
     plusOneName:         row.plus_one_name ?? '',
     plusOneDietaryNotes: row.plus_one_dietary_notes ?? '',
+    teaCeremonyRsvp:     row.tea_ceremony_rsvp ?? null,
+    ceremonyRsvp:        row.ceremony_rsvp ?? null,
     rsvpSubmittedAt:     row.rsvp_submitted_at ?? '',
     tableNumber:         row.table_number ?? null,
   };
@@ -124,17 +136,24 @@ export async function submitRsvp(responses: RsvpResponse[]): Promise<void> {
     responses.map((r) => ({
       sql: `
         INSERT INTO rsvps
-          (guest_id, status, dietary_notes, email, plus_one_name, plus_one_dietary_notes, submitted_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+          (guest_id, status, dietary_notes, email, plus_one_name, plus_one_dietary_notes,
+           tea_ceremony_rsvp, ceremony_rsvp, submitted_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(guest_id) DO UPDATE SET
           status                 = excluded.status,
           email                  = excluded.email,
           dietary_notes          = excluded.dietary_notes,
           plus_one_name          = excluded.plus_one_name,
           plus_one_dietary_notes = excluded.plus_one_dietary_notes,
+          tea_ceremony_rsvp      = excluded.tea_ceremony_rsvp,
+          ceremony_rsvp          = excluded.ceremony_rsvp,
           submitted_at           = excluded.submitted_at
       `,
-      args: [r.guestId, r.status, r.dietaryNotes, r.email, r.plusOneName, r.plusOneDietaryNotes, now],
+      args: [
+        r.guestId, r.status, r.dietaryNotes, r.email,
+        r.plusOneName, r.plusOneDietaryNotes,
+        r.teaCeremonyRsvp, r.ceremonyRsvp, now,
+      ],
     })),
     'write'
   );
@@ -198,17 +217,25 @@ export async function upsertHousehold(id: string, name: string): Promise<void> {
 export async function upsertGuest(g: {
   id: string; householdId: string; firstName: string; lastName: string;
   phone: string; email: string; plusOneAllowed: number;
+  teaCeremonyInvite?: number; ceremonyInvite?: number;
 }): Promise<void> {
   await db.execute({
-    sql: `INSERT INTO guests (id, household_id, first_name, last_name, phone, email, plus_one_allowed)
-          VALUES (?, ?, ?, ?, ?, ?, ?)
+    sql: `INSERT INTO guests
+            (id, household_id, first_name, last_name, phone, email, plus_one_allowed,
+             tea_ceremony_invite, ceremony_invite)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
           ON CONFLICT(id) DO UPDATE SET
-            household_id     = excluded.household_id,
-            first_name       = excluded.first_name,
-            last_name        = excluded.last_name,
-            phone            = excluded.phone,
-            email            = excluded.email,
-            plus_one_allowed = excluded.plus_one_allowed`,
-    args: [g.id, g.householdId, g.firstName, g.lastName, g.phone, g.email, g.plusOneAllowed],
+            household_id        = excluded.household_id,
+            first_name          = excluded.first_name,
+            last_name           = excluded.last_name,
+            phone               = excluded.phone,
+            email               = excluded.email,
+            plus_one_allowed    = excluded.plus_one_allowed,
+            tea_ceremony_invite = excluded.tea_ceremony_invite,
+            ceremony_invite     = excluded.ceremony_invite`,
+    args: [
+      g.id, g.householdId, g.firstName, g.lastName, g.phone, g.email, g.plusOneAllowed,
+      g.teaCeremonyInvite ?? 0, g.ceremonyInvite ?? 0,
+    ],
   });
 }

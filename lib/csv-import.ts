@@ -17,6 +17,8 @@ export interface ImportRow {
   phone: string;
   email: string;
   plusOneAllowed: number;
+  teaCeremonyInvite: number;
+  ceremonyInvite: number;
 }
 
 export interface RowError {
@@ -84,7 +86,9 @@ export function parseCsvText(csvText: string): { valid: ImportRow[]; errors: Row
     const firstName    = get('first_name');
     const lastName     = get('last_name');
     const householdName = get('household_name');
-    const plusOneRaw   = get('plus_one_allowed').toUpperCase();
+    const plusOneRaw        = get('plus_one_allowed').toUpperCase();
+    const teaCeremonyRaw    = get('tea_ceremony_invite').toUpperCase();
+    const ceremonyRaw       = get('ceremony_invite').toUpperCase();
 
     if (!firstName)     rowErrors.push('first_name is required');
     if (!lastName)      rowErrors.push('last_name is required');
@@ -99,8 +103,15 @@ export function parseCsvText(csvText: string): { valid: ImportRow[]; errors: Row
       else seenPhones.set(phone, lineNumber);
     }
 
-    if (!['TRUE', 'FALSE', '1', '0', 'YES', 'NO', ''].includes(plusOneRaw)) {
+    const boolValues = ['TRUE', 'FALSE', '1', '0', 'YES', 'NO', ''];
+    if (!boolValues.includes(plusOneRaw)) {
       rowErrors.push(`plus_one_allowed must be TRUE or FALSE, got "${get('plus_one_allowed')}"`);
+    }
+    if (!boolValues.includes(teaCeremonyRaw)) {
+      rowErrors.push(`tea_ceremony_invite must be TRUE or FALSE, got "${get('tea_ceremony_invite')}"`);
+    }
+    if (!boolValues.includes(ceremonyRaw)) {
+      rowErrors.push(`ceremony_invite must be TRUE or FALSE, got "${get('ceremony_invite')}"`);
     }
 
     const householdId = get('household_id') || `h-${i + 1}`;
@@ -117,6 +128,7 @@ export function parseCsvText(csvText: string): { valid: ImportRow[]; errors: Row
       return;
     }
 
+    const isBoolTrue = (v: string) => ['TRUE', '1', 'YES'].includes(v);
     valid.push({
       householdId,
       householdName,
@@ -125,7 +137,9 @@ export function parseCsvText(csvText: string): { valid: ImportRow[]; errors: Row
       lastName,
       phone: phone!,
       email: get('email'),
-      plusOneAllowed: ['TRUE', '1', 'YES'].includes(plusOneRaw) ? 1 : 0,
+      plusOneAllowed:    isBoolTrue(plusOneRaw)     ? 1 : 0,
+      teaCeremonyInvite: isBoolTrue(teaCeremonyRaw) ? 1 : 0,
+      ceremonyInvite:    isBoolTrue(ceremonyRaw)    ? 1 : 0,
     });
   });
 
@@ -142,7 +156,9 @@ export async function importRows(rows: ImportRow[]): Promise<void> {
       id: row.guestId, householdId: row.householdId,
       firstName: row.firstName, lastName: row.lastName,
       phone: row.phone, email: row.email,
-      plusOneAllowed: row.plusOneAllowed,
+      plusOneAllowed:    row.plusOneAllowed,
+      teaCeremonyInvite: row.teaCeremonyInvite,
+      ceremonyInvite:    row.ceremonyInvite,
     });
   }
 }

@@ -19,6 +19,8 @@ export default function AdminGuestTable({ guests }: { guests: Guest[] }) {
             <th>Status</th>
             <th>Dietary</th>
             <th>Plus-one</th>
+            <th title="Tea Ceremony Invite">Tea</th>
+            <th title="Ceremony Invite">Ceremony</th>
             <th>Table #</th>
             <th>Submitted</th>
           </tr>
@@ -44,6 +46,22 @@ export default function AdminGuestTable({ guests }: { guests: Guest[] }) {
                     ? `${g.plusOneName}${g.plusOneDietaryNotes ? ` (${g.plusOneDietaryNotes})` : ''}`
                     : '—'}
                 </td>
+                <td className="admin-table__center">
+                  <InviteCheckbox
+                    guestId={g.guestId}
+                    field="teaCeremonyInvite"
+                    initial={g.teaCeremonyInvite}
+                    sibling={g.ceremonyInvite}
+                  />
+                </td>
+                <td className="admin-table__center">
+                  <InviteCheckbox
+                    guestId={g.guestId}
+                    field="ceremonyInvite"
+                    initial={g.ceremonyInvite}
+                    sibling={g.teaCeremonyInvite}
+                  />
+                </td>
                 <td>
                   <TableInput guestId={g.guestId} initial={g.tableNumber} />
                 </td>
@@ -58,6 +76,42 @@ export default function AdminGuestTable({ guests }: { guests: Guest[] }) {
         </tbody>
       </table>
     </div>
+  );
+}
+
+function InviteCheckbox({
+  guestId, field, initial, sibling,
+}: {
+  guestId: string;
+  field: 'teaCeremonyInvite' | 'ceremonyInvite';
+  initial: boolean;
+  sibling: boolean;
+}) {
+  const [checked, setChecked] = useState(initial);
+  const [saving, setSaving]   = useState(false);
+
+  async function toggle(next: boolean) {
+    setChecked(next);
+    setSaving(true);
+    await fetch(`/api/admin/guests/${guestId}/invites`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        teaCeremonyInvite: field === 'teaCeremonyInvite' ? next : sibling,
+        ceremonyInvite:    field === 'ceremonyInvite'    ? next : sibling,
+      }),
+    });
+    setSaving(false);
+  }
+
+  return (
+    <input
+      type="checkbox"
+      checked={checked}
+      disabled={saving}
+      onChange={(e) => toggle(e.target.checked)}
+      className="admin-table-checkbox"
+    />
   );
 }
 

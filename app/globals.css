@@ -501,6 +501,12 @@ main { flex: 1; }
   margin: 0 0 16px 0;
 }
 
+.guest-card__fieldset--event {
+  border-left: 3px solid #c8a96e;
+  padding-left: 14px;
+  margin-left: 2px;
+}
+
 .guest-card__radio-label {
   display: flex;
   align-items: center;
@@ -973,6 +979,16 @@ main { flex: 1; }
 }
 .admin-table-input:disabled { opacity: 0.5; }
 
+.admin-table__center { text-align: center; }
+
+.admin-table-checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #5E8A6E;
+}
+.admin-table-checkbox:disabled { opacity: 0.5; cursor: default; }
+
 /* ── CSV Upload ───────────────────────────────────────────────────────────────── */
 
 .csv-upload__dropzone {
@@ -1367,6 +1383,7 @@ main { flex: 1; }
 }
 
 .story-section__photo {
+  position: relative;
   flex: 0 0 300px;
   height: 380px;
   border-radius: 4px;

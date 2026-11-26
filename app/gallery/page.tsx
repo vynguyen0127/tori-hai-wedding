@@ -6,7 +6,7 @@ import Gallery from '@/components/Gallery';
 export const metadata = { title: 'Gallery · Victoria & Hai' };
 
 export default async function GalleryPage() {
-  const { blobs } = await list();
+  const { blobs } = await list({ prefix: 'gallery/' });
 
   const photos = blobs
     .filter((b) => /\.(jpe?g|png|webp|gif|avif)$/i.test(b.pathname))

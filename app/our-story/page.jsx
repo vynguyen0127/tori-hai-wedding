@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export const metadata = { title: 'Our Story · Victoria & Hai' };
 
 export default function OurStory() {
@@ -32,8 +34,14 @@ export default function OurStory() {
                 </p>
               </div>
             </div>
-            <div className="story-section__photo story-section__photo--placeholder">
-              <span>Photo</span>
+            <div className="story-section__photo">
+              <Image
+                src="https://owfn6jdews0xpubv.public.blob.vercel-storage.com/IMG_9205_Original.jpg"
+                alt="Tori and Hai"
+                fill
+                style={{ objectFit: 'cover' }}
+                sizes="(max-width: 680px) 100vw, 300px"
+              />
             </div>
           </div>
         </section>

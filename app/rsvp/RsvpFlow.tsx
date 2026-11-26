@@ -17,7 +17,9 @@ interface GuestFormState {
   dietaryNotes: string;
   plusOneName: string;
   plusOneDietaryNotes: string;
-  email: string
+  email: string;
+  teaCeremonyRsvp: 'attending' | 'declined' | '';
+  ceremonyRsvp: 'attending' | 'declined' | '';
 }
 
 // ── Step 1: Phone lookup ──────────────────────────────────────────────────────
@@ -106,7 +108,9 @@ function HouseholdForm({ household, onSubmitted }: HouseholdFormProps) {
       dietaryNotes:        g.dietaryNotes,
       plusOneName:         g.plusOneName,
       plusOneDietaryNotes: g.plusOneDietaryNotes,
-      email:               ''
+      email:               '',
+      teaCeremonyRsvp:     g.teaCeremonyRsvp ?? '',
+      ceremonyRsvp:        g.ceremonyRsvp ?? '',
     }))
   );
   const [submitting, setSubmitting] = useState(false);
@@ -131,18 +135,43 @@ function HouseholdForm({ household, onSubmitted }: HouseholdFormProps) {
       return;
     }
 
+    // Validate per-event RSVPs for invited guests
+    for (let i = 0; i < responses.length; i++) {
+      const r = responses[i];
+      const g = household.guests[i];
+      if (r.status === 'attending') {
+        if (g.teaCeremonyInvite && !r.teaCeremonyRsvp) {
+          setError('Please select your tea ceremony RSVP for every guest.');
+          return;
+        }
+        if (g.ceremonyInvite && !r.ceremonyRsvp) {
+          setError('Please select your ceremony RSVP for every guest.');
+          return;
+        }
+      }
+    }
+
     const payload: SubmitRequest = {
       householdId: household.householdId,
       householdName: household.householdName,
-      responses: responses.map((r): RsvpResponse => ({
-        guestId:             r.guestId,
-        status:              r.status as 'attending' | 'declined',
-        dietaryNotes:        r.dietaryNotes,
-        plusOneName:         r.plusOneName,
-        plusOneDietaryNotes: r.plusOneDietaryNotes,
-        email:               r.email,
-        fullName:            ""
-      })),
+      responses: responses.map((r, i): RsvpResponse => {
+        const g = household.guests[i];
+        return {
+          guestId:             r.guestId,
+          status:              r.status as 'attending' | 'declined',
+          dietaryNotes:        r.dietaryNotes,
+          plusOneName:         r.plusOneName,
+          plusOneDietaryNotes: r.plusOneDietaryNotes,
+          email:               r.email,
+          fullName:            '',
+          teaCeremonyRsvp:     g.teaCeremonyInvite && r.status === 'attending'
+                                 ? (r.teaCeremonyRsvp as 'attending' | 'declined' || null)
+                                 : null,
+          ceremonyRsvp:        g.ceremonyInvite && r.status === 'attending'
+                                 ? (r.ceremonyRsvp as 'attending' | 'declined' || null)
+                                 : null,
+        };
+      }),
     };
 
     setSubmitting(true);
@@ -178,7 +207,7 @@ function HouseholdForm({ household, onSubmitted }: HouseholdFormProps) {
               <h3 className="guest-card__name">{guest.firstName} {guest.lastName}</h3>
 
               <fieldset className="guest-card__fieldset">
-                <legend className="guest-card__legend">Will you be joining us?</legend>
+                <legend className="guest-card__legend">Reception — Will you be joining us?</legend>
                 <label className="guest-card__radio-label">
                   <input type="radio" name={`status-${guest.guestId}`} value="attending"
                     checked={r.status === 'attending'}
@@ -192,6 +221,42 @@ function HouseholdForm({ household, onSubmitted }: HouseholdFormProps) {
                   Regretfully declines
                 </label>
               </fieldset>
+
+              {r.status === 'attending' && guest.teaCeremonyInvite && (
+                <fieldset className="guest-card__fieldset guest-card__fieldset--event">
+                  <legend className="guest-card__legend">Tea Ceremony (May 29)</legend>
+                  <label className="guest-card__radio-label">
+                    <input type="radio" name={`tea-${guest.guestId}`} value="attending"
+                      checked={r.teaCeremonyRsvp === 'attending'}
+                      onChange={() => update(guest.guestId, 'teaCeremonyRsvp', 'attending')} />
+                    Attending
+                  </label>
+                  <label className="guest-card__radio-label">
+                    <input type="radio" name={`tea-${guest.guestId}`} value="declined"
+                      checked={r.teaCeremonyRsvp === 'declined'}
+                      onChange={() => update(guest.guestId, 'teaCeremonyRsvp', 'declined')} />
+                    Unable to attend
+                  </label>
+                </fieldset>
+              )}
+
+              {r.status === 'attending' && guest.ceremonyInvite && (
+                <fieldset className="guest-card__fieldset guest-card__fieldset--event">
+                  <legend className="guest-card__legend">Ceremony (May 29)</legend>
+                  <label className="guest-card__radio-label">
+                    <input type="radio" name={`ceremony-${guest.guestId}`} value="attending"
+                      checked={r.ceremonyRsvp === 'attending'}
+                      onChange={() => update(guest.guestId, 'ceremonyRsvp', 'attending')} />
+                    Attending
+                  </label>
+                  <label className="guest-card__radio-label">
+                    <input type="radio" name={`ceremony-${guest.guestId}`} value="declined"
+                      checked={r.ceremonyRsvp === 'declined'}
+                      onChange={() => update(guest.guestId, 'ceremonyRsvp', 'declined')} />
+                    Unable to attend
+                  </label>
+                </fieldset>
+              )}
 
               {r.status === 'attending' && (
                 <div className="guest-card__details">

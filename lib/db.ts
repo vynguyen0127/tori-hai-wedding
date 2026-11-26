@@ -47,9 +47,11 @@ export async function ensureSchema(): Promise<void> {
         first_name       TEXT NOT NULL,
         last_name        TEXT NOT NULL,
         phone            TEXT NOT NULL,
-        email            TEXT NOT NULL DEFAULT '',
-        plus_one_allowed INTEGER NOT NULL DEFAULT 0,
-        table_number     INTEGER,
+        email                TEXT NOT NULL DEFAULT '',
+        plus_one_allowed     INTEGER NOT NULL DEFAULT 0,
+        table_number         INTEGER,
+        tea_ceremony_invite  INTEGER NOT NULL DEFAULT 0,
+        ceremony_invite      INTEGER NOT NULL DEFAULT 0,
         UNIQUE(phone)
       );
 
@@ -61,6 +63,8 @@ export async function ensureSchema(): Promise<void> {
         email                  TEXT NOT NULL DEFAULT '',
         plus_one_name          TEXT NOT NULL DEFAULT '',
         plus_one_dietary_notes TEXT NOT NULL DEFAULT '',
+        tea_ceremony_rsvp      TEXT CHECK(tea_ceremony_rsvp IN ('attending','declined')),
+        ceremony_rsvp          TEXT CHECK(ceremony_rsvp IN ('attending','declined')),
         submitted_at           TEXT NOT NULL
       );
     `);

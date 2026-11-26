@@ -1,0 +1,7 @@
+household_id,household_name,guest_id,first_name,last_name,phone,email,plus_one_allowed,tea_ceremony_invite,ceremony_invite
+h-001,Nguyen Family,g-001,Victoria,Nguyen,8325551001,tori@example.com,FALSE,TRUE,TRUE
+h-001,Nguyen Family,g-002,Linda,Nguyen,8325551002,,FALSE,TRUE,TRUE
+h-002,Tran Family,g-003,Hai,Tran,8325551003,hai@example.com,TRUE,TRUE,TRUE
+h-002,Tran Family,g-004,James,Tran,8325551004,,FALSE,FALSE,TRUE
+h-003,Chen Household,g-005,Sophie,Chen,8325551005,,TRUE,FALSE,FALSE
+h-003,Chen Household,g-006,Michael,Chen,8325551006,,FALSE,FALSE,FALSE
