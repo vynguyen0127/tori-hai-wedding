@@ -927,7 +927,7 @@ main { flex: 1; }
 .admin-table-wrap {
   overflow-x: auto;
   overflow-y: auto;
-  max-height: calc(100vh - 280px);
+  max-height: calc(100vh - 180px);
 }
 
 .admin-table {
