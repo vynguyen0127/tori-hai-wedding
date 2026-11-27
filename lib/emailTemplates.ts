@@ -44,20 +44,8 @@ export function adminNotificationTemplate(householdName: string, guestHtml: stri
                 </html>`
 }
 
-export function guestConfirmationTemplate(householdName: string, body: string, fallbackEnabled: boolean): string {
-    return fallbackEnabled ? 
-    `<!DOCTYPE html>
-  ...
-  <div class="body">
-    ${body}         <!-- Claude's generated content goes here -->
-
-    <div class="details-box">
-      ...event details...
-    </div>
-  </div>
-  ...`
-    : `
-    <!DOCTYPE html>
+export function guestConfirmationTemplate(householdName: string, body: string): string {
+    return `<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />
