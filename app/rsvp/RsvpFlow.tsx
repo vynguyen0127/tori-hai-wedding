@@ -139,15 +139,13 @@ function HouseholdForm({ household, onSubmitted }: HouseholdFormProps) {
     for (let i = 0; i < responses.length; i++) {
       const r = responses[i];
       const g = household.guests[i];
-      if (r.status === 'attending') {
-        if (g.teaCeremonyInvite && !r.teaCeremonyRsvp) {
-          setError('Please select your tea ceremony RSVP for every guest.');
-          return;
-        }
-        if (g.ceremonyInvite && !r.ceremonyRsvp) {
-          setError('Please select your ceremony RSVP for every guest.');
-          return;
-        }
+      if (g.teaCeremonyInvite && !r.teaCeremonyRsvp) {
+        setError('Please select a tea ceremony RSVP for every invited guest.');
+        return;
+      }
+      if (g.ceremonyInvite && !r.ceremonyRsvp) {
+        setError('Please select a ceremony RSVP for every invited guest.');
+        return;
       }
     }
 
@@ -164,10 +162,10 @@ function HouseholdForm({ household, onSubmitted }: HouseholdFormProps) {
           plusOneDietaryNotes: r.plusOneDietaryNotes,
           email:               r.email,
           fullName:            '',
-          teaCeremonyRsvp:     g.teaCeremonyInvite && r.status === 'attending'
+          teaCeremonyRsvp:     g.teaCeremonyInvite
                                  ? (r.teaCeremonyRsvp as 'attending' | 'declined' || null)
                                  : null,
-          ceremonyRsvp:        g.ceremonyInvite && r.status === 'attending'
+          ceremonyRsvp:        g.ceremonyInvite
                                  ? (r.ceremonyRsvp as 'attending' | 'declined' || null)
                                  : null,
         };
@@ -222,9 +220,27 @@ function HouseholdForm({ household, onSubmitted }: HouseholdFormProps) {
                 </label>
               </fieldset>
 
-              {r.status === 'attending' && guest.teaCeremonyInvite && (
+              {guest.teaCeremonyInvite && (
                 <fieldset className="guest-card__fieldset guest-card__fieldset--event">
-                  <legend className="guest-card__legend">Tea Ceremony (May 29)</legend>
+                  <legend className="guest-card__legend">
+                    <span className="event-legend-wrap">
+                      Tea Ceremony — May 28th, 12:00 PM
+                      <span className="event-tooltip-trigger" tabIndex={0}>
+                        ?
+                        <span className="event-tooltip">
+                          Placeholder: A brief description of the Vietnamese tea ceremony and what guests can expect.
+                        </span>
+                      </span>
+                      <a href="/tea-ceremony" target="_blank" rel="noopener noreferrer" className="event-details-link">
+                        Details →
+                      </a>
+                    </span>
+                  </legend>
+                  <div className="event-details">
+                    <p className="event-details__line">📍 19311 Round Prairie Lane, Cypress TX 77433</p>
+                    <p className="event-details__line">🔑 Gate code: #2514</p>
+                    <p className="event-details__line">🚗 Street parking only</p>
+                  </div>
                   <label className="guest-card__radio-label">
                     <input type="radio" name={`tea-${guest.guestId}`} value="attending"
                       checked={r.teaCeremonyRsvp === 'attending'}
@@ -240,9 +256,26 @@ function HouseholdForm({ household, onSubmitted }: HouseholdFormProps) {
                 </fieldset>
               )}
 
-              {r.status === 'attending' && guest.ceremonyInvite && (
+              {guest.ceremonyInvite && (
                 <fieldset className="guest-card__fieldset guest-card__fieldset--event">
-                  <legend className="guest-card__legend">Ceremony (May 29)</legend>
+                  <legend className="guest-card__legend">
+                    <span className="event-legend-wrap">
+                      Ceremony — May 29th, 10:00 AM
+                      <span className="event-tooltip-trigger" tabIndex={0}>
+                        ?
+                        <span className="event-tooltip">
+                          Placeholder: A brief description of the wedding ceremony and what guests can expect.
+                        </span>
+                      </span>
+                      <a href="/ceremony" target="_blank" rel="noopener noreferrer" className="event-details-link">
+                        Details →
+                      </a>
+                    </span>
+                  </legend>
+                  <div className="event-details">
+                    <p className="event-details__line">📍 Vietnam Buddhist Center, 10002 Synott Rd, Sugar Land TX 77478</p>
+                    <p className="event-details__line">🚗 Parking available</p>
+                  </div>
                   <label className="guest-card__radio-label">
                     <input type="radio" name={`ceremony-${guest.guestId}`} value="attending"
                       checked={r.ceremonyRsvp === 'attending'}
