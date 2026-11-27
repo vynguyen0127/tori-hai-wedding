@@ -23,20 +23,22 @@ console.log('[email] email set:', process.env.ADMIN_EMAIL);
       generatedBody = guestHTML
     }
 console.log('[email] email generated:', generatedBody);
-    await Promise.all([
+    const [adminResult, guestResult] = await Promise.all([
         resend.emails.send({
-        from: 'onboarding@resend.dev',
-        to: process.env.ADMIN_EMAIL!.split(','),
-        subject: `RSVP Update — ${householdName}`,
-        html: adminNotificationTemplate(householdName, guestHTML),
+          from: 'onboarding@resend.dev',
+          to: process.env.ADMIN_EMAIL!.split(','),
+          subject: `RSVP Update — ${householdName}`,
+          html: adminNotificationTemplate(householdName, guestHTML),
         }),
         resend.emails.send({
-        from: 'onboarding@resend.dev',
-        to: process.env.ADMIN_EMAIL!.split(','),
-        subject: 'Your RSVP is confirmed — Tori & Hai',
-        html: guestConfirmationTemplate(householdName, generatedBody, fallbackEnabled),
+          from: 'onboarding@resend.dev',
+          to: process.env.ADMIN_EMAIL!.split(','),
+          subject: 'Your RSVP is confirmed — Tori & Hai',
+          html: guestConfirmationTemplate(householdName, generatedBody, fallbackEnabled),
         }),
     ]);
+    console.log('[email] admin send result:', JSON.stringify(adminResult));
+    console.log('[email] guest send result:', JSON.stringify(guestResult));
 }
 
 function guestResponsesToHTML(RsvpResponses: RsvpResponse[]): string{
@@ -82,7 +84,7 @@ async function generateConfirmationEmail(
     ).join('\n');
 
   const message = await anthropic.messages.create({
-    model: 'claude-fable-5',
+    model: 'claude-fable-5-2',
     max_tokens: 1024,
     system: `You are writing warm, personal confirmation emails for a wedding.
 The wedding is for Tori and Hai on May 29, 2027 at White Oaks on the Bayou in Houston, TX.
