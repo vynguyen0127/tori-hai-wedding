@@ -15,7 +15,7 @@ interface GuestRow {
   household_name: string;
   first_name: string;
   last_name: string;
-  phone: string;
+  phone: string | null;
   email: string;
   plus_one_allowed: number;
   table_number: number | null;
@@ -216,25 +216,48 @@ export async function upsertHousehold(id: string, name: string): Promise<void> {
 
 export async function upsertGuest(g: {
   id: string; householdId: string; firstName: string; lastName: string;
-  phone: string; email: string; plusOneAllowed: number;
+  phone: string | null; email: string; plusOneAllowed: number;
   teaCeremonyInvite?: number; ceremonyInvite?: number;
 }): Promise<void> {
-  await db.execute({
-    sql: `INSERT INTO guests
-            (id, household_id, first_name, last_name, phone, email, plus_one_allowed,
-             tea_ceremony_invite, ceremony_invite)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-          ON CONFLICT(phone) DO UPDATE SET
-            household_id        = excluded.household_id,
-            first_name          = excluded.first_name,
-            last_name           = excluded.last_name,
-            email               = excluded.email,
-            plus_one_allowed    = excluded.plus_one_allowed,
-            tea_ceremony_invite = excluded.tea_ceremony_invite,
-            ceremony_invite     = excluded.ceremony_invite`,
-    args: [
-      g.id, g.householdId, g.firstName, g.lastName, g.phone, g.email, g.plusOneAllowed,
-      g.teaCeremonyInvite ?? 0, g.ceremonyInvite ?? 0,
-    ],
-  });
+  const args = [
+    g.id, g.householdId, g.firstName, g.lastName, g.phone ?? null, g.email, g.plusOneAllowed,
+    g.teaCeremonyInvite ?? 0, g.ceremonyInvite ?? 0,
+  ];
+
+  if (g.phone) {
+    // Guests with a phone: upsert on phone so re-importing the same guest is idempotent
+    await db.execute({
+      sql: `INSERT INTO guests
+              (id, household_id, first_name, last_name, phone, email, plus_one_allowed,
+               tea_ceremony_invite, ceremony_invite)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(phone) DO UPDATE SET
+              household_id        = excluded.household_id,
+              first_name          = excluded.first_name,
+              last_name           = excluded.last_name,
+              email               = excluded.email,
+              plus_one_allowed    = excluded.plus_one_allowed,
+              tea_ceremony_invite = excluded.tea_ceremony_invite,
+              ceremony_invite     = excluded.ceremony_invite`,
+      args,
+    });
+  } else {
+    // Guests without a phone (children, etc.): upsert on id
+    await db.execute({
+      sql: `INSERT INTO guests
+              (id, household_id, first_name, last_name, phone, email, plus_one_allowed,
+               tea_ceremony_invite, ceremony_invite)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(id) DO UPDATE SET
+              household_id        = excluded.household_id,
+              first_name          = excluded.first_name,
+              last_name           = excluded.last_name,
+              phone               = excluded.phone,
+              email               = excluded.email,
+              plus_one_allowed    = excluded.plus_one_allowed,
+              tea_ceremony_invite = excluded.tea_ceremony_invite,
+              ceremony_invite     = excluded.ceremony_invite`,
+      args,
+    });
+  }
 }

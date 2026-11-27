@@ -46,7 +46,7 @@ export async function ensureSchema(): Promise<void> {
         household_id     TEXT NOT NULL REFERENCES households(id),
         first_name       TEXT NOT NULL,
         last_name        TEXT NOT NULL,
-        phone            TEXT NOT NULL,
+        phone                TEXT,
         email                TEXT NOT NULL DEFAULT '',
         plus_one_allowed     INTEGER NOT NULL DEFAULT 0,
         table_number         INTEGER,

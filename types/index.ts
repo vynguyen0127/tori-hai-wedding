@@ -8,7 +8,7 @@ export interface Guest {
   householdName: string;
   firstName: string;
   lastName: string;
-  phone: string;
+  phone: string | null;
   email: string;
   plusOneAllowed: boolean;
   teaCeremonyInvite: boolean;

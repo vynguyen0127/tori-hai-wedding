@@ -14,7 +14,7 @@ export interface ImportRow {
   guestId: string;
   firstName: string;
   lastName: string;
-  phone: string;
+  phone: string | null;
   email: string;
   plusOneAllowed: number;
   teaCeremonyInvite: number;
@@ -97,10 +97,11 @@ export function parseCsvText(csvText: string): { valid: ImportRow[]; errors: Row
     if (!lastName)      rowErrors.push('last_name is required');
     if (!householdName) rowErrors.push('household_name is required');
 
-    const phone = normalizePhone(get('phone'));
-    if (!phone) {
-      rowErrors.push(`invalid phone "${get('phone')}" — must contain 10 digits`);
-    } else {
+    const rawPhone = get('phone');
+    const phone = rawPhone ? normalizePhone(rawPhone) : null;
+    if (rawPhone && !phone) {
+      rowErrors.push(`invalid phone "${rawPhone}" — must contain 10 digits`);
+    } else if (phone) {
       const prev = seenPhones.get(phone);
       if (prev !== undefined) rowErrors.push(`duplicate phone (already on line ${prev})`);
       else seenPhones.set(phone, lineNumber);
@@ -138,7 +139,7 @@ export function parseCsvText(csvText: string): { valid: ImportRow[]; errors: Row
       guestId,
       firstName,
       lastName,
-      phone: phone!,
+      phone,
       email: get('email'),
       plusOneAllowed:    isBoolTrue(plusOneRaw)     ? 1 : 0,
       teaCeremonyInvite: isBoolTrue(teaCeremonyRaw) ? 1 : 0,
