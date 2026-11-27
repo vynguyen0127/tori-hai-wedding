@@ -54,9 +54,11 @@ export async function POST(
 
     await submitRsvp(sanitized);
 
-    void sendRsvpNotification(sanitized, householdName!).catch(err =>
-      console.error('failed to send RSVP notification', err)
-    );
+    try {
+      await sendRsvpNotification(sanitized, householdName!);
+    } catch (err) {
+      console.error('failed to send RSVP notification', err);
+    }
 
     return NextResponse.json({ ok: true });
   } catch (err) {
