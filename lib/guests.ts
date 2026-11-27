@@ -224,11 +224,10 @@ export async function upsertGuest(g: {
             (id, household_id, first_name, last_name, phone, email, plus_one_allowed,
              tea_ceremony_invite, ceremony_invite)
           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-          ON CONFLICT(id) DO UPDATE SET
+          ON CONFLICT(phone) DO UPDATE SET
             household_id        = excluded.household_id,
             first_name          = excluded.first_name,
             last_name           = excluded.last_name,
-            phone               = excluded.phone,
             email               = excluded.email,
             plus_one_allowed    = excluded.plus_one_allowed,
             tea_ceremony_invite = excluded.tea_ceremony_invite,

@@ -1602,3 +1602,41 @@ main { flex: 1; }
   text-decoration: underline;
   white-space: nowrap;
 }
+
+/* ── Google Sheets sync ───────────────────────────────────────────────────────── */
+
+.sheets-sync {
+  margin-bottom: 20px;
+}
+
+.sheets-sync__row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.sheets-sync__btn {
+  background: #3a6b4a;
+  color: #fff;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.sheets-sync__btn:hover:not(:disabled) { background: #2d5a3d; }
+.sheets-sync__btn:disabled { opacity: 0.6; cursor: default; }
+
+.sheets-sync__ok  { font-size: 0.88rem; color: #3a6b4a; }
+.sheets-sync__err { font-size: 0.88rem; color: #c0392b; }
+
+.sheets-sync__errors {
+  margin: 10px 0 0 0;
+  padding-left: 18px;
+  font-size: 0.82rem;
+  color: #c0392b;
+  list-style: disc;
+}

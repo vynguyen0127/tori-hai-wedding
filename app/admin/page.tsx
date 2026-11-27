@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic';
 
 import { getAllGuests, getRsvpSummary } from '@/lib/guests';
 import CsvUpload from '@/components/CsvUpload';
+import SheetsSync from '@/components/SheetsSync';
 import AdminGuestTable from '@/components/AdminGuestTable';
 
 export default async function AdminPage() {
@@ -39,6 +40,7 @@ export default async function AdminPage() {
 
       <section className="admin-section">
         <h2>Import Guest List</h2>
+        <SheetsSync />
         <CsvUpload />
       </section>
 
