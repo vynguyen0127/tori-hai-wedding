@@ -8,7 +8,6 @@ export async function sendRsvpNotification(RsvpResponses: RsvpResponse[], househ
   console.log('[email] RESEND_API_KEY set:', !!process.env.RESEND_API_KEY);
   console.log('[email] email set:', process.env.ADMIN_EMAIL);
 
-  const guestHTML = guestResponsesToHTML(RsvpResponses);
   const guestEmails = RsvpResponses.map(r => r.email).filter(Boolean);
   console.log('[email] guest emails:', guestEmails);
 
@@ -17,7 +16,7 @@ export async function sendRsvpNotification(RsvpResponses: RsvpResponse[], househ
       from: 'hello@htwedding2027.com',
       to: process.env.ADMIN_EMAIL!.split(','),
       subject: `RSVP Update — ${householdName}`,
-      html: adminNotificationTemplate(householdName, guestHTML),
+      html: adminNotificationTemplate(householdName, RsvpResponses),
     }).then(r => console.log('[email] admin send result:', JSON.stringify(r))),
   ];
 
@@ -27,7 +26,7 @@ export async function sendRsvpNotification(RsvpResponses: RsvpResponse[], househ
         from: 'hello@htwedding2027.com',
         to: guestEmails,
         subject: 'Your RSVP is confirmed — Tori & Hai',
-        html: guestConfirmationTemplate(householdName, guestHTML),
+        html: guestConfirmationTemplate(householdName, RsvpResponses),
       }).then(r => console.log('[email] guest send result:', JSON.stringify(r)))
     );
   } else {
@@ -35,21 +34,4 @@ export async function sendRsvpNotification(RsvpResponses: RsvpResponse[], househ
   }
 
   await Promise.all(sends);
-}
-
-function guestResponsesToHTML(RsvpResponses: RsvpResponse[]): string {
-  return RsvpResponses.map((response) =>
-    `<div class="guest">
-      <div class="guest-name">${response.fullName}</div>
-      ${response.status === 'attending'
-        ? `<span class="badge badge--attending">Attending</span>`
-        : `<span class="badge badge--declined">Declined</span>`
-      }
-      ${response.dietaryNotes ? `<div class="detail">🥗 ${response.dietaryNotes}</div>` : ''}
-      ${response.plusOneName
-        ? `<div class="detail">＋1 ${response.plusOneName}${response.plusOneDietaryNotes ? ` &mdash; ${response.plusOneDietaryNotes}` : ''}</div>`
-        : ''
-      }
-    </div>`
-  ).join('');
 }
