@@ -18,7 +18,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata = {
-  title: 'Victoria & Hai · May 29, 2027',
+  title: 'Tori & Hai · May 29, 2027',
   description: 'Join us to celebrate our wedding!',
 };
 
@@ -30,7 +30,7 @@ export default function RootLayout({ children }) {
           <Navbar />
           <main>{children}</main>
           <footer className="footer">
-            <p>Made with ♡ for Victoria &amp; Hai · May 29, 2027</p>
+            <p>Made with ♡ for Tori &amp; Hai · May 29, 2027</p>
           </footer>
         </div>
       </body>

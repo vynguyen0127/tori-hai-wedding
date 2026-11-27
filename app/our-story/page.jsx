@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-export const metadata = { title: 'Our Story · Victoria & Hai' };
+export const metadata = { title: 'Our Story · Tori & Hai' };
 
 export default function OurStory() {
   return (

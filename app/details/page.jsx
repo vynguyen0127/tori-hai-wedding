@@ -1,4 +1,4 @@
-export const metadata = { title: 'Wedding Details · Victoria & Hai' };
+export const metadata = { title: 'Wedding Details · Tori & Hai' };
 
 export default function Details() {
   return (

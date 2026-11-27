@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic';
 import { getSeatingChart } from '@/lib/guests';
 import SeatingChart from '@/components/SeatingChart';
 
-export const metadata = { title: 'Seating Chart · Victoria & Hai' };
+export const metadata = { title: 'Seating Chart · Tori & Hai' };
 
 export default async function SeatingPage() {
   const rows = await getSeatingChart();

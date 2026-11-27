@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic';
 import { list } from '@vercel/blob';
 import Gallery from '@/components/Gallery';
 
-export const metadata = { title: 'Gallery · Victoria & Hai' };
+export const metadata = { title: 'Gallery · Tori & Hai' };
 
 export default async function GalleryPage() {
   const { blobs } = await list({ prefix: 'gallery/' });

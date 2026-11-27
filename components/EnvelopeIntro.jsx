@@ -73,7 +73,7 @@ export default function EnvelopeIntro() {
           ].filter(Boolean).join(' ')}>
             <p className="env-card__eyebrow">You are cordially invited</p>
             <div className="env-card__rule" />
-            <h2 className="env-card__names">Victoria &amp; Hai</h2>
+            <h2 className="env-card__names">Tori &amp; Hai</h2>
             <p className="env-card__ornament">✿</p>
             <p className="env-card__date">Saturday, May 29th</p>
             <p className="env-card__year">2027</p>

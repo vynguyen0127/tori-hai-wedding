@@ -1,4 +1,4 @@
-export const metadata = { title: 'Wedding Party · Victoria & Hai' };
+export const metadata = { title: 'Wedding Party · Tori & Hai' };
 
 const bridesParty = [
   { name: 'Bridesmaid Name', role: 'Maid of Honor' },
