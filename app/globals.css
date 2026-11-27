@@ -226,6 +226,11 @@ main { flex: 1; }
   justify-content: center;
   flex-wrap: wrap;
   margin-top: 1.5rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(180, 155, 100, 0.35);
+  border-radius: 6px;
+  padding: 1.2rem 2rem;
+  backdrop-filter: blur(4px);
 }
 
 .countdown-unit {
@@ -1912,6 +1917,7 @@ main { flex: 1; }
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
+  justify-items: center;
 }
 
 .party-card {
@@ -1960,6 +1966,7 @@ main { flex: 1; }
   .party-columns {
     flex-direction: column;
     gap: 3rem;
+    align-items: stretch;
   }
   .party-divider {
     display: none;
@@ -1970,6 +1977,37 @@ main { flex: 1; }
 }
 
 /* ── Home hero photos ─────────────────────────────────────────────────────────── */
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-48px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(48px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.home-hero-photo-frame--left {
+  animation: slideInLeft 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.home-hero-photo-frame--right {
+  animation: slideInRight 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+
+.home-hero-content {
+  animation: fadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+}
+
+.home-hero-photo-mobile {
+  animation: fadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+}
 
 .home-hero-photo-frame {
   position: relative;
