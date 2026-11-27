@@ -225,16 +225,17 @@ export async function upsertGuest(g: {
   ];
 
   if (g.phone) {
-    // Guests with a phone: upsert on phone so re-importing the same guest is idempotent
+    // Guests with a phone: upsert on id first, then on phone for re-imports
     await db.execute({
       sql: `INSERT INTO guests
               (id, household_id, first_name, last_name, phone, email, plus_one_allowed,
                tea_ceremony_invite, ceremony_invite)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ON CONFLICT(phone) DO UPDATE SET
+            ON CONFLICT(id) DO UPDATE SET
               household_id        = excluded.household_id,
               first_name          = excluded.first_name,
               last_name           = excluded.last_name,
+              phone               = excluded.phone,
               email               = excluded.email,
               plus_one_allowed    = excluded.plus_one_allowed,
               tea_ceremony_invite = excluded.tea_ceremony_invite,
