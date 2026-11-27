@@ -31,6 +31,19 @@ export default function Gallery({ photos }: GalleryProps) {
     return () => window.removeEventListener('keydown', onKey);
   }, [lightboxIndex, close, prev, next]);
 
+  // Preload adjacent images when lightbox is open
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+    const indices = [
+      (lightboxIndex + 1) % photos.length,
+      (lightboxIndex - 1 + photos.length) % photos.length,
+    ];
+    indices.forEach((i) => {
+      const img = new window.Image();
+      img.src = photos[i].url;
+    });
+  }, [lightboxIndex, photos]);
+
   // Stable rotation per card — seeded from index so it never changes on re-render
   function rotation(i: number) {
     const angles = [-4, 2, -2.5, 3.5, -1.5, 4, -3, 1.5, -4.5, 2.5];
@@ -102,6 +115,7 @@ export default function Gallery({ photos }: GalleryProps) {
           <div className="lightbox__counter">
             {lightboxIndex + 1} / {photos.length}
           </div>
+
         </div>
       )}
     </>
