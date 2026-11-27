@@ -1646,3 +1646,164 @@ main { flex: 1; }
   color: #c0392b;
   list-style: disc;
 }
+
+/* ── Wedding Details page ────────────────────────────────────────────────────── */
+
+.details-page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 6rem;
+}
+
+.details-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.details-header__eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #b8912a;
+  margin: 0 0 0.5rem;
+}
+
+.details-header__title {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 400;
+  color: #1C1B19;
+  margin: 0 0 0.5rem;
+}
+
+.details-header__date {
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  color: #7a9880;
+  margin: 0;
+}
+
+.details-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.details-card {
+  background: #fff;
+  border: 1px solid #dde8d4;
+  border-radius: 8px;
+  padding: 2rem 2.5rem;
+}
+
+.details-card__label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #b8912a;
+  margin-bottom: 0.4rem;
+}
+
+.details-card__title {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: #1C1B19;
+  margin: 0 0 1.5rem;
+}
+
+.details-card__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.details-card__row {
+  display: flex;
+  gap: 0.9rem;
+  font-size: 0.95rem;
+  color: #3a3a38;
+  line-height: 1.6;
+}
+
+.details-card__icon {
+  flex-shrink: 0;
+  width: 1.4rem;
+  font-size: 1rem;
+}
+
+.details-card__subtext {
+  color: #6e6e6a;
+}
+
+.details-card__map-link {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 0.82rem;
+  color: #5e8a6e;
+  text-decoration: underline;
+}
+
+.details-card__note {
+  margin: 1.25rem 0 0;
+  font-size: 0.85rem;
+  color: #7a9880;
+  line-height: 1.6;
+  border-top: 1px solid #eef4e8;
+  padding-top: 1rem;
+}
+
+.details-card--dress .details-card__title {
+  margin-bottom: 0.75rem;
+}
+
+.details-card__dress-style {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #1C1B19;
+  margin: 0 0 0.6rem;
+}
+
+.details-card__dress-note {
+  font-size: 0.9rem;
+  color: #3a3a38;
+  line-height: 1.6;
+  margin: 0 0 1.25rem;
+}
+
+.details-card__swatches {
+  margin-top: 0.5rem;
+}
+
+.details-card__swatch-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.details-card__swatch-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9a8070;
+  flex-shrink: 0;
+}
+
+.details-card__swatch-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.details-card__swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+@media (max-width: 600px) {
+  .details-card {
+    padding: 1.5rem;
+  }
+}
