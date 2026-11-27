@@ -1994,6 +1994,19 @@ main { flex: 1; }
 .home-hero-photos--right .home-hero-photo--1 { transform: rotate(-2deg); }
 
 @media (max-width: 768px) {
-  .home-hero-photos { display: none; }
-  .home-hero { gap: 0; }
+  .home-hero {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-bottom: 3rem;
+  }
+  .home-hero-photos--left { display: none; }
+  .home-hero-photos--right {
+    flex-direction: row;
+    justify-content: center;
+  }
+  .home-hero-photos--right .home-hero-photo--0 {
+    width: 140px;
+    height: 185px;
+  }
+  .home-hero-photos--right .home-hero-photo--1 { display: none; }
 }
