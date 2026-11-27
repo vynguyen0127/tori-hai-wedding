@@ -45,7 +45,7 @@ export async function POST(
         dietaryNotes:        r.dietaryNotes ?? '',
         plusOneName:         guest.plusOneAllowed ? (r.plusOneName ?? '') : '',
         plusOneDietaryNotes: guest.plusOneAllowed ? (r.plusOneDietaryNotes ?? '') : '',
-        email:               guest.email,
+        email:               r.email ?? guest.email ?? '',
         fullName:            guest.firstName + " " + guest.lastName,
         teaCeremonyRsvp:     guest.teaCeremonyInvite ? (r.teaCeremonyRsvp ?? null) : null,
         ceremonyRsvp:        guest.ceremonyInvite    ? (r.ceremonyRsvp    ?? null) : null,

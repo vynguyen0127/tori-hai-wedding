@@ -10,23 +10,31 @@ export async function sendRsvpNotification(RsvpResponses: RsvpResponse[], househ
 
   const guestHTML = guestResponsesToHTML(RsvpResponses);
   const guestEmails = RsvpResponses.map(r => r.email).filter(Boolean);
+  console.log('[email] guest emails:', guestEmails);
 
-  const [adminResult, guestResult] = await Promise.all([
+  const sends: Promise<unknown>[] = [
     resend.emails.send({
       from: 'onboarding@resend.dev',
       to: process.env.ADMIN_EMAIL!.split(','),
       subject: `RSVP Update — ${householdName}`,
       html: adminNotificationTemplate(householdName, guestHTML),
-    }),
-    resend.emails.send({
-      from: 'onboarding@resend.dev',
-      to: guestEmails,
-      subject: 'Your RSVP is confirmed — Tori & Hai',
-      html: guestConfirmationTemplate(householdName, guestHTML),
-    }),
-  ]);
-  console.log('[email] admin send result:', JSON.stringify(adminResult));
-  console.log('[email] guest send result:', JSON.stringify(guestResult));
+    }).then(r => console.log('[email] admin send result:', JSON.stringify(r))),
+  ];
+
+  if (guestEmails.length > 0) {
+    sends.push(
+      resend.emails.send({
+        from: 'onboarding@resend.dev',
+        to: guestEmails,
+        subject: 'Your RSVP is confirmed — Tori & Hai',
+        html: guestConfirmationTemplate(householdName, guestHTML),
+      }).then(r => console.log('[email] guest send result:', JSON.stringify(r)))
+    );
+  } else {
+    console.log('[email] no guest emails — skipping confirmation send');
+  }
+
+  await Promise.all(sends);
 }
 
 function guestResponsesToHTML(RsvpResponses: RsvpResponse[]): string {
