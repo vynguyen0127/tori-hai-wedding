@@ -8,6 +8,10 @@ import { normalizePhone } from './phoneUtils';
 import { upsertHousehold, upsertGuest } from './guests';
 import { ensureSchema } from './db';
 
+function slugify(s: string): string {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
+
 export interface ImportRow {
   householdId: string;
   householdName: string;
@@ -118,8 +122,8 @@ export function parseCsvText(csvText: string): { valid: ImportRow[]; errors: Row
       rowErrors.push(`ceremony_invite must be TRUE or FALSE, got "${get('ceremony_invite')}"`);
     }
 
-    const householdId = get('household_id') || `h-${i + 1}`;
-    const guestId     = get('guest_id')     || `g-${i + 1}`;
+    const householdId = get('household_id') || slugify(`h-${householdName}`);
+    const guestId     = get('guest_id')     || slugify(`g-${firstName}-${lastName}-${householdName}`);
 
     if (seenGuestIds.has(guestId)) {
       rowErrors.push(`duplicate guest_id "${guestId}" (already on line ${seenGuestIds.get(guestId)})`);
