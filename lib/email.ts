@@ -32,7 +32,7 @@ console.log('[email] email generated:', generatedBody);
         }),
         resend.emails.send({
           from: 'onboarding@resend.dev',
-          to: process.env.ADMIN_EMAIL!.split(','),
+          to: RsvpResponses.map(r => r.email).filter(Boolean),
           subject: 'Your RSVP is confirmed — Tori & Hai',
           html: guestConfirmationTemplate(householdName, generatedBody, fallbackEnabled),
         }),
