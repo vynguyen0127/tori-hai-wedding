@@ -14,7 +14,7 @@ export async function sendRsvpNotification(RsvpResponses: RsvpResponse[], househ
 
   const sends: Promise<unknown>[] = [
     resend.emails.send({
-      from: 'onboarding@resend.dev',
+      from: 'hello@htwedding2027.com',
       to: process.env.ADMIN_EMAIL!.split(','),
       subject: `RSVP Update — ${householdName}`,
       html: adminNotificationTemplate(householdName, guestHTML),
@@ -24,7 +24,7 @@ export async function sendRsvpNotification(RsvpResponses: RsvpResponse[], househ
   if (guestEmails.length > 0) {
     sends.push(
       resend.emails.send({
-        from: 'onboarding@resend.dev',
+        from: 'hello@htwedding2027.com',
         to: guestEmails,
         subject: 'Your RSVP is confirmed — Tori & Hai',
         html: guestConfirmationTemplate(householdName, guestHTML),
