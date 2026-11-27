@@ -74,6 +74,7 @@ export default function Gallery({ photos }: GalleryProps) {
                 fill
                 sizes="(max-width: 600px) 50vw, (max-width: 1000px) 33vw, 280px"
                 className="polaroid__img"
+                quality={65}
               />
             </div>
             <div className="polaroid__caption" />
@@ -101,6 +102,7 @@ export default function Gallery({ photos }: GalleryProps) {
               sizes="100vw"
               className="lightbox__img"
               priority
+              quality={65}
             />
           </div>
 
