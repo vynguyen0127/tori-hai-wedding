@@ -950,6 +950,9 @@ main { flex: 1; }
   text-transform: uppercase;
   color: #999;
   font-weight: 500;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .admin-table__household {
