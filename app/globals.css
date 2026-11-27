@@ -1835,3 +1835,11 @@ main { flex: 1; }
   background: #2d5a8e;
 }
 .sheets-sync__btn--export:hover:not(:disabled) { background: #244a7a; }
+
+.guest-card__plus-one-note {
+  margin: 0.75rem 0 0.5rem;
+  font-size: 0.85rem;
+  color: #5e8a6e;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}

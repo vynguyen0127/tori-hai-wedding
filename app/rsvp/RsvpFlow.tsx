@@ -310,6 +310,7 @@ function HouseholdForm({ household, onSubmitted }: HouseholdFormProps) {
 
                   {guest.plusOneAllowed && (
                     <>
+                      <p className="guest-card__plus-one-note">🎉 You're invited to bring a plus-one — the more the merrier!</p>
                       <label className="guest-card__label" htmlFor={`plus-${guest.guestId}`}>
                         Plus-one name
                       </label>
