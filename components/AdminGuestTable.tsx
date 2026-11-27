@@ -16,11 +16,13 @@ export default function AdminGuestTable({ guests }: { guests: Guest[] }) {
           <tr>
             <th>Household</th>
             <th>Name</th>
-            <th>Status</th>
+            <th title="Tea Ceremony Invite">Tea Invite</th>
+            <th title="Tea Ceremony RSVP">Tea RSVP</th>
+            <th title="Ceremony Invite">Ceremony Invite</th>
+            <th title="Ceremony RSVP">Ceremony RSVP</th>
+            <th title="Reception RSVP">Reception RSVP</th>
             <th>Dietary</th>
             <th>Plus-one</th>
-            <th title="Tea Ceremony Invite">Tea</th>
-            <th title="Ceremony Invite">Ceremony</th>
             <th>Table #</th>
             <th>Submitted</th>
           </tr>
@@ -35,17 +37,6 @@ export default function AdminGuestTable({ guests }: { guests: Guest[] }) {
                   </td>
                 )}
                 <td>{g.firstName} {g.lastName}</td>
-                <td>
-                  <span className={`admin-badge admin-badge--${g.rsvpStatus}`}>
-                    {g.rsvpStatus}
-                  </span>
-                </td>
-                <td>{g.dietaryNotes || '—'}</td>
-                <td>
-                  {g.plusOneName
-                    ? `${g.plusOneName}${g.plusOneDietaryNotes ? ` (${g.plusOneDietaryNotes})` : ''}`
-                    : '—'}
-                </td>
                 <td className="admin-table__center">
                   <InviteCheckbox
                     guestId={g.guestId}
@@ -55,12 +46,31 @@ export default function AdminGuestTable({ guests }: { guests: Guest[] }) {
                   />
                 </td>
                 <td className="admin-table__center">
+                  {g.teaCeremonyInvite
+                    ? <RsvpBadge status={g.teaCeremonyRsvp} />
+                    : <span className="admin-table__na">—</span>}
+                </td>
+                <td className="admin-table__center">
                   <InviteCheckbox
                     guestId={g.guestId}
                     field="ceremonyInvite"
                     initial={g.ceremonyInvite}
                     sibling={g.teaCeremonyInvite}
                   />
+                </td>
+                <td className="admin-table__center">
+                  {g.ceremonyInvite
+                    ? <RsvpBadge status={g.ceremonyRsvp} />
+                    : <span className="admin-table__na">—</span>}
+                </td>
+                <td className="admin-table__center">
+                  <RsvpBadge status={g.rsvpStatus} />
+                </td>
+                <td>{g.dietaryNotes || '—'}</td>
+                <td>
+                  {g.plusOneName
+                    ? `${g.plusOneName}${g.plusOneDietaryNotes ? ` (${g.plusOneDietaryNotes})` : ''}`
+                    : '—'}
                 </td>
                 <td>
                   <TableInput guestId={g.guestId} initial={g.tableNumber} />
@@ -77,6 +87,11 @@ export default function AdminGuestTable({ guests }: { guests: Guest[] }) {
       </table>
     </div>
   );
+}
+
+function RsvpBadge({ status }: { status: string | null }) {
+  const s = status ?? 'pending';
+  return <span className={`admin-badge admin-badge--${s}`}>{s}</span>;
 }
 
 function InviteCheckbox({

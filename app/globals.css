@@ -991,6 +991,7 @@ main { flex: 1; }
 .admin-table-input:disabled { opacity: 0.5; }
 
 .admin-table__center { text-align: center; }
+.admin-table__na { color: #aaa; }
 
 .admin-table-checkbox {
   width: 16px;
