@@ -1173,6 +1173,29 @@ main { flex: 1; }
   height: min(90vw, 90vh);
 }
 
+@media (max-width: 600px) {
+  .lightbox {
+    flex-direction: column;
+  }
+  .lightbox__img-wrap {
+    width: 90vw;
+    height: 90vw;
+    max-height: 85vh;
+  }
+  .lightbox__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    font-size: 2.5rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(0,0,0,0.3);
+    border-radius: 4px;
+  }
+  .lightbox__arrow--prev { left: 0.5rem; }
+  .lightbox__arrow--next { right: 0.5rem; }
+}
+
 .lightbox__img {
   object-fit: contain;
 }
