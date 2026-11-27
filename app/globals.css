@@ -1807,3 +1807,8 @@ main { flex: 1; }
     padding: 1.5rem;
   }
 }
+
+.sheets-sync__btn--export {
+  background: #2d5a8e;
+}
+.sheets-sync__btn--export:hover:not(:disabled) { background: #244a7a; }

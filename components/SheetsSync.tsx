@@ -8,28 +8,49 @@ interface SyncResult {
   errors: { lineNumber: number; message: string }[];
 }
 
+interface ExportResult {
+  updated: number;
+  message?: string;
+}
+
 export default function SheetsSync() {
-  const [status, setStatus]   = useState<'idle' | 'syncing' | 'done' | 'error'>('idle');
-  const [result, setResult]   = useState<SyncResult | null>(null);
-  const [errMsg, setErrMsg]   = useState('');
+  const [syncStatus, setSyncStatus]   = useState<'idle' | 'loading' | 'done' | 'error'>('idle');
+  const [syncResult, setSyncResult]   = useState<SyncResult | null>(null);
+  const [syncErr, setSyncErr]         = useState('');
+
+  const [exportStatus, setExportStatus] = useState<'idle' | 'loading' | 'done' | 'error'>('idle');
+  const [exportResult, setExportResult] = useState<ExportResult | null>(null);
+  const [exportErr, setExportErr]       = useState('');
 
   async function sync() {
-    setStatus('syncing');
-    setResult(null);
-    setErrMsg('');
+    setSyncStatus('loading');
+    setSyncResult(null);
+    setSyncErr('');
     try {
       const res  = await fetch('/api/admin/sync-sheets', { method: 'POST', credentials: 'include' });
       const data = await res.json();
-      if (!res.ok) {
-        setErrMsg(data.error ?? 'Sync failed.');
-        setStatus('error');
-        return;
-      }
-      setResult(data);
-      setStatus('done');
+      if (!res.ok) { setSyncErr(data.error ?? 'Sync failed.'); setSyncStatus('error'); return; }
+      setSyncResult(data);
+      setSyncStatus('done');
     } catch {
-      setErrMsg('Could not reach the server.');
-      setStatus('error');
+      setSyncErr('Could not reach the server.');
+      setSyncStatus('error');
+    }
+  }
+
+  async function exportRsvps() {
+    setExportStatus('loading');
+    setExportResult(null);
+    setExportErr('');
+    try {
+      const res  = await fetch('/api/admin/export-sheets', { method: 'POST', credentials: 'include' });
+      const data = await res.json();
+      if (!res.ok) { setExportErr(data.error ?? 'Export failed.'); setExportStatus('error'); return; }
+      setExportResult(data);
+      setExportStatus('done');
+    } catch {
+      setExportErr('Could not reach the server.');
+      setExportStatus('error');
     }
   }
 
@@ -39,26 +60,41 @@ export default function SheetsSync() {
         <button
           className="sheets-sync__btn"
           onClick={sync}
-          disabled={status === 'syncing'}
+          disabled={syncStatus === 'loading'}
         >
-          {status === 'syncing' ? 'Syncing…' : '↻ Sync from Google Sheet'}
+          {syncStatus === 'loading' ? 'Syncing…' : '↻ Sync from Sheet'}
         </button>
-        {status === 'done' && result && (
+        {syncStatus === 'done' && syncResult && (
           <span className="sheets-sync__ok">
-            ✓ {result.imported} imported{result.skipped > 0 ? `, ${result.skipped} skipped` : ''}
+            ✓ {syncResult.imported} imported{syncResult.skipped > 0 ? `, ${syncResult.skipped} skipped` : ''}
           </span>
         )}
-        {status === 'error' && (
-          <span className="sheets-sync__err">{errMsg}</span>
-        )}
+        {syncStatus === 'error' && <span className="sheets-sync__err">{syncErr}</span>}
       </div>
-      {status === 'done' && result && result.errors.length > 0 && (
+
+      {syncStatus === 'done' && syncResult && syncResult.errors.length > 0 && (
         <ul className="sheets-sync__errors">
-          {result.errors.map((e) => (
+          {syncResult.errors.map((e) => (
             <li key={e.lineNumber}>Row {e.lineNumber}: {e.message}</li>
           ))}
         </ul>
       )}
+
+      <div className="sheets-sync__row" style={{ marginTop: '0.5rem' }}>
+        <button
+          className="sheets-sync__btn sheets-sync__btn--export"
+          onClick={exportRsvps}
+          disabled={exportStatus === 'loading'}
+        >
+          {exportStatus === 'loading' ? 'Exporting…' : '↑ Export RSVPs to Sheet'}
+        </button>
+        {exportStatus === 'done' && exportResult && (
+          <span className="sheets-sync__ok">
+            ✓ {exportResult.message ?? `${exportResult.updated} guests updated`}
+          </span>
+        )}
+        {exportStatus === 'error' && <span className="sheets-sync__err">{exportErr}</span>}
+      </div>
     </div>
   );
 }
