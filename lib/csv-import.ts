@@ -82,6 +82,9 @@ export function parseCsvText(csvText: string): { valid: ImportRow[]; errors: Row
     const values = parseCsvLine(line);
     const get = (name: string) => values[col(name)]?.trim() ?? '';
 
+    // Skip rows where all required fields are blank (trailing empty rows from Google Sheets)
+    if (!get('first_name') && !get('last_name') && !get('household_name') && !get('phone')) return;
+
     const rowErrors: string[] = [];
     const firstName    = get('first_name');
     const lastName     = get('last_name');
