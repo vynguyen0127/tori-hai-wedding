@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface SyncResult {
   imported: number;
@@ -14,6 +15,7 @@ interface ExportResult {
 }
 
 export default function SheetsSync() {
+  const router = useRouter();
   const [syncStatus, setSyncStatus]   = useState<'idle' | 'loading' | 'done' | 'error'>('idle');
   const [syncResult, setSyncResult]   = useState<SyncResult | null>(null);
   const [syncErr, setSyncErr]         = useState('');
@@ -32,6 +34,7 @@ export default function SheetsSync() {
       if (!res.ok) { setSyncErr(data.error ?? 'Sync failed.'); setSyncStatus('error'); return; }
       setSyncResult(data);
       setSyncStatus('done');
+      router.refresh();
     } catch {
       setSyncErr('Could not reach the server.');
       setSyncStatus('error');
