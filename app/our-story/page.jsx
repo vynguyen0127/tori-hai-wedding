@@ -70,8 +70,14 @@ export default function OurStory() {
                 </p>
               </div>
             </div>
-            <div className="story-section__photo story-section__photo--placeholder">
-              <span>Photo</span>
+            <div className="story-section__photo">
+              <Image
+                src="https://owfn6jdews0xpubv.public.blob.vercel-storage.com/DKT09407.JPEG"
+                alt="Tori and Hai engagement"
+                fill
+                style={{ objectFit: 'cover' }}
+                sizes="(max-width: 680px) 100vw, 300px"
+              />
             </div>
           </div>
         </section>
