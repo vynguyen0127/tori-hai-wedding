@@ -16,9 +16,7 @@ export default function AdminGuestTable({ guests }: { guests: Guest[] }) {
           <tr>
             <th>Household</th>
             <th>Name</th>
-            <th title="Tea Ceremony Invite">Tea Invite</th>
             <th title="Tea Ceremony RSVP">Tea RSVP</th>
-            <th title="Ceremony Invite">Ceremony Invite</th>
             <th title="Ceremony RSVP">Ceremony RSVP</th>
             <th title="Reception RSVP">Reception RSVP</th>
             <th>Dietary</th>
@@ -38,25 +36,9 @@ export default function AdminGuestTable({ guests }: { guests: Guest[] }) {
                 )}
                 <td>{g.firstName} {g.lastName}</td>
                 <td className="admin-table__center">
-                  <InviteCheckbox
-                    guestId={g.guestId}
-                    field="teaCeremonyInvite"
-                    initial={g.teaCeremonyInvite}
-                    sibling={g.ceremonyInvite}
-                  />
-                </td>
-                <td className="admin-table__center">
                   {g.teaCeremonyInvite
                     ? <RsvpBadge status={g.teaCeremonyRsvp} />
                     : <span className="admin-table__na">—</span>}
-                </td>
-                <td className="admin-table__center">
-                  <InviteCheckbox
-                    guestId={g.guestId}
-                    field="ceremonyInvite"
-                    initial={g.ceremonyInvite}
-                    sibling={g.teaCeremonyInvite}
-                  />
                 </td>
                 <td className="admin-table__center">
                   {g.ceremonyInvite
