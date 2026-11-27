@@ -2,30 +2,18 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Countdown from '@/components/Countdown';
 import EnvelopeIntro from '@/components/EnvelopeIntro';
-import { list } from '@vercel/blob';
 
-export default async function Home() {
-  const { blobs } = await list({ prefix: 'gallery/', limit: 4 });
-  const photos = blobs
-    .filter((b) => /\.(jpe?g|png|webp|gif|avif)$/i.test(b.pathname))
-    .slice(0, 4);
+const PHOTO_LEFT  = 'https://owfn6jdews0xpubv.public.blob.vercel-storage.com/gallery/IMG_5028.JPEG.jpeg';
+const PHOTO_RIGHT = 'https://owfn6jdews0xpubv.public.blob.vercel-storage.com/gallery/IMG_5916.JPEG.jpeg';
 
-  const left  = photos.slice(0, 2);
-  const right = photos.slice(2, 4);
-
+export default function Home() {
   return (
     <>
       <EnvelopeIntro />
       <div className="home-hero">
-        {left.length > 0 && (
-          <div className="home-hero-photos home-hero-photos--left">
-            {left.map((p, i) => (
-              <div key={p.url} className={`home-hero-photo home-hero-photo--${i}`}>
-                <Image src={p.url} alt="" fill style={{ objectFit: 'cover' }} sizes="200px" quality={70} />
-              </div>
-            ))}
-          </div>
-        )}
+        <div className="home-hero-photo-frame home-hero-photo-frame--left">
+          <Image src={PHOTO_LEFT} alt="Tori & Hai" fill style={{ objectFit: 'cover' }} sizes="220px" quality={75} />
+        </div>
 
         <div className="home-hero-content">
           <p className="home-pre-title">You are cordially invited</p>
@@ -37,15 +25,14 @@ export default async function Home() {
           <Link href="/rsvp" className="home-rsvp-btn">RSVP</Link>
         </div>
 
-        {right.length > 0 && (
-          <div className="home-hero-photos home-hero-photos--right">
-            {right.map((p, i) => (
-              <div key={p.url} className={`home-hero-photo home-hero-photo--${i}`}>
-                <Image src={p.url} alt="" fill style={{ objectFit: 'cover' }} sizes="200px" quality={70} />
-              </div>
-            ))}
-          </div>
-        )}
+        <div className="home-hero-photo-frame home-hero-photo-frame--right">
+          <Image src={PHOTO_RIGHT} alt="Tori & Hai" fill style={{ objectFit: 'cover' }} sizes="220px" quality={75} />
+        </div>
+
+        {/* Mobile only — full width below content */}
+        <div className="home-hero-photo-mobile">
+          <Image src={PHOTO_LEFT} alt="Tori & Hai" fill style={{ objectFit: 'cover' }} sizes="100vw" quality={75} />
+        </div>
       </div>
     </>
   );
