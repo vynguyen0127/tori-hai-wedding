@@ -1974,8 +1974,8 @@ main { flex: 1; }
 .home-hero-photo-frame {
   position: relative;
   flex-shrink: 0;
-  width: 260px;
-  height: 350px;
+  width: 300px;
+  height: 400px;
   z-index: 1;
   /* Decorative double border */
   outline: 3px solid rgba(184, 145, 42, 0.5);
