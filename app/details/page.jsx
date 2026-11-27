@@ -11,87 +11,9 @@ export default function Details() {
 
       <div className="details-sections">
 
-        {/* Tea Ceremony */}
-        <section className="details-card">
-          <div className="details-card__label">The Day Before</div>
-          <h2 className="details-card__title">Tea Ceremony</h2>
-          <div className="details-card__rows">
-            <div className="details-card__row">
-              <span className="details-card__icon">📅</span>
-              <span>Thursday, May 28, 2027</span>
-            </div>
-            <div className="details-card__row">
-              <span className="details-card__icon">🕛</span>
-              <span>12:00 PM</span>
-            </div>
-            <div className="details-card__row">
-              <span className="details-card__icon">📍</span>
-              <div>
-                <div>19311 Round Prairie Lane</div>
-                <div>Cypress, TX 77433</div>
-                <a
-                  href="https://maps.google.com/?q=19311+Round+Prairie+Lane+Cypress+TX+77433"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="details-card__map-link"
-                >
-                  Open in Maps →
-                </a>
-              </div>
-            </div>
-            <div className="details-card__row">
-              <span className="details-card__icon">🚗</span>
-              <span>Street parking only &nbsp;·&nbsp; Gate code: #2514</span>
-            </div>
-          </div>
-          <p className="details-card__note">
-            The tea ceremony is a Vietnamese tradition celebrating the union of two families.
-            Attendance is by invitation only.
-          </p>
-        </section>
-
-        {/* Wedding Ceremony */}
-        <section className="details-card">
-          <div className="details-card__label">The Big Day</div>
-          <h2 className="details-card__title">Wedding Ceremony</h2>
-          <div className="details-card__rows">
-            <div className="details-card__row">
-              <span className="details-card__icon">📅</span>
-              <span>Friday, May 29, 2027</span>
-            </div>
-            <div className="details-card__row">
-              <span className="details-card__icon">🕙</span>
-              <span>10:00 AM</span>
-            </div>
-            <div className="details-card__row">
-              <span className="details-card__icon">📍</span>
-              <div>
-                <div>Vietnam Buddhist Center</div>
-                <div>10002 Synott Rd</div>
-                <div>Sugar Land, TX 77478</div>
-                <a
-                  href="https://maps.google.com/?q=10002+Synott+Rd+Sugar+Land+TX+77478"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="details-card__map-link"
-                >
-                  Open in Maps →
-                </a>
-              </div>
-            </div>
-            <div className="details-card__row">
-              <span className="details-card__icon">🚗</span>
-              <span>Parking available on site</span>
-            </div>
-          </div>
-          <p className="details-card__note">
-            The ceremony is by invitation only. Please arrive a few minutes early to find your seat.
-          </p>
-        </section>
-
         {/* Reception */}
         <section className="details-card">
-          <div className="details-card__label">Celebrate With Us</div>
+          <div className="details-card__label">The Big Day</div>
           <h2 className="details-card__title">Reception</h2>
           <div className="details-card__rows">
             <div className="details-card__row">
